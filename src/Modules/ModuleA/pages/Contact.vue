@@ -1,4 +1,5 @@
 <script>
+  //En futuras entregas habrá una validación para asegurar que el usuario de User Advice este registrado en la base de datos.
 export default {
   data() {
     // Estado de los datos del formulario y mensajes de error
