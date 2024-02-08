@@ -3,9 +3,25 @@
 </script>
 
 <template>
-    <h1>Register</h1>
+    <form class="Register">
+        <label>
+            <p>Username</p>
+            <input type="text">
+        </label>
+        <label>
+            <p>Password</p>
+            <input type="text">
+        </label>
+        <label>
+            <p>Repeat Password</p>
+            <input type="text">
+        </label>
+        <button>Register</button>
+    </form>
 </template>
 
 <style>
-
+.Register {
+    
+}
 </style>

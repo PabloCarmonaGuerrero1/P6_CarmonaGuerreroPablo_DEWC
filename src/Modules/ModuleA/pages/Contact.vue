@@ -141,10 +141,8 @@ export default {
 </script>
 
 <template>
-  <!-- Encabezado de la página de contacto -->
-  <h1>Contact</h1>
   <!-- Formulario con opciones para revisión o consejo -->
-  <form>
+  <form class="Contact">
     <!-- Selector para elegir entre revisión y consejo -->
     <label>
       <select v-model="selected" @change="handleSelectChange">
@@ -175,12 +173,6 @@ export default {
     </div>
     <!-- Sección específica para consejo -->
     <div v-if="selected === 'advice'">
-      <!-- Campo para ingresar el consejo en formato de texto largo -->
-      <label>
-        <p>Advice</p>
-        <textarea v-model="advice" @input="validateAdvice"></textarea>
-        <div class="error" v-if="errors.advice">{{ errors.advice }}</div>
-      </label>
       <!-- Campo para ingresar el consejo del usuario en formato de texto corto -->
       <label>
         <p>User Advice</p>
@@ -192,15 +184,73 @@ export default {
         <input type="date" v-model="date" @input="validateDate">
         <div class="error" v-if="errors.date">{{ errors.date }}</div>
       </label>
+      <!-- Campo para ingresar el consejo en formato de texto largo -->
+      <label>
+        <p>Advice</p>
+        <textarea v-model="advice" @input="validateAdvice"></textarea>
+        <div class="error" v-if="errors.advice">{{ errors.advice }}</div>
+      </label>
     </div>
     <!-- Botón de envío del formulario -->
-    <button @click.prevent="validateAndSubmit" :disabled="isSubmitDisabled">Submit</button>
+    <button @click.prevent="validateAndSubmit" :disabled="isSubmitDisabled">Send</button>
   </form>
 </template>
 <style>
 /* Estilo para los mensajes de error en color rojo y tamaño de fuente pequeño */
-.error {
+.Contact .error {
   color: red;
   font-size: 12px;
+}
+.Contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+.Contact label{
+  text-align: center;
+  display: block;
+}
+.Contact input{
+  border-radius: 2.8125rem;
+  margin-top: 0;
+  height: 2rem;
+  width: 10rem;
+  text-align: center;
+  font-family: 'Mogra', sans-serif;
+}
+.Contact textarea{
+  border-radius: 2.8125rem;
+  margin-top: 0;
+  font-family: 'Mogra', sans-serif;
+  padding: 1rem;
+}
+.Contact p{
+  color: #0BFF00;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 3rem; 
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.Contact select{
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 2rem;
+  border-radius: 2.8125rem;
+  height: 3rem;
+  width: 8rem;
+  text-align: center;
+}
+.Contact  button{
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 2rem;
+  border-radius: 2.8125rem;
+  height: 3rem;
+  width: 8rem;
+  margin-top: 2rem;
 }
 </style>
