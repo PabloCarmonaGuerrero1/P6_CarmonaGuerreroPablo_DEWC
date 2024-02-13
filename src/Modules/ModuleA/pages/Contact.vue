@@ -208,6 +208,7 @@ export default {
   justify-content: center;
   margin-top: 5rem;
   margin-bottom: 5rem;
+  min-height: 38rem;
 }
 .Contact label{
   text-align: center;

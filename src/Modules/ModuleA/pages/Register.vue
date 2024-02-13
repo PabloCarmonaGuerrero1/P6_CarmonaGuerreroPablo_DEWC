@@ -21,7 +21,5 @@
 </template>
 
 <style>
-.Register {
-    
-}
+
 </style>
