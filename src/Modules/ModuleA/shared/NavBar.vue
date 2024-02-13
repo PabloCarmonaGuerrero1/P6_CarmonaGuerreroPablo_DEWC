@@ -8,21 +8,21 @@
 </template>
 <style>
 .NavBar{
-    background-color: #2CD824;
     height: 5rem;
+    padding: 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
+    background-color: #2CD824;
 }
 .NavBar img{
     max-width: 3rem;
     max-height: 3rem;
 }
 .NavBar h1{
+    color: black;
     font-family: 'Monofett', sans-serif;
     font-size: 3rem; 
-    color: black;
 
 }
 .NavBar a{

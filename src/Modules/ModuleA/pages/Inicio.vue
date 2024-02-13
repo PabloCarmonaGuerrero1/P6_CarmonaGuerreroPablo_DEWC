@@ -10,12 +10,12 @@
 </template>
 <style>
 .Inicio{
+    height: 75vh;
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 75vh;
     color: #0BFF00;
     font-family: 'Nanum Brush Script', cursive;
     font-size: 1.5rem; 

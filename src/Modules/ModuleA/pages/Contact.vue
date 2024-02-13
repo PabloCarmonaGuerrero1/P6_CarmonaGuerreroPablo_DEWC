@@ -202,56 +202,61 @@ export default {
   font-size: 12px;
 }
 .Contact {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 5rem;
-  margin-bottom: 5rem;
-  min-height: 38rem;
+
 }
 .Contact label{
-  text-align: center;
   display: block;
+  text-align: center;
 }
 .Contact input{
-  border-radius: 2.8125rem;
+  height: 4rem;
+  width: 20rem;
   margin-top: 0;
-  height: 2rem;
-  width: 10rem;
+  border-radius: 2.8125rem;
   text-align: center;
   font-family: 'Mogra', sans-serif;
+  font-size: 1.5rem;
 }
 .Contact textarea{
-  border-radius: 2.8125rem;
+  height: 4rem;
+  width: 20rem;
   margin-top: 0;
-  font-family: 'Mogra', sans-serif;
   padding: 1rem;
+  border-radius: 2.8125rem;
+  font-family: 'Mogra', sans-serif;
+  font-size: 1.5rem;
+  
 }
 .Contact p{
-  color: #0BFF00;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 3rem; 
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  color: #0BFF00;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 4rem; 
 }
 .Contact select{
+  height: 4rem;
+  width: 20rem;
+  border-radius: 2.8125rem;
+  text-align: center;
   color: black;
   font-family: 'Nanum Brush Script', cursive;
-  font-size: 2rem;
-  border-radius: 2.8125rem;
-  height: 3rem;
-  width: 8rem;
-  text-align: center;
+  font-size: 3rem;
 }
 .Contact  button{
+  height: 3.5rem;
+  width: 12rem;
+  margin-top: 2rem;
+  border-radius: 2.8125rem;
   background-color: #2CD824;
   color: black;
   font-family: 'Nanum Brush Script', cursive;
-  font-size: 2rem;
-  border-radius: 2.8125rem;
-  height: 3rem;
-  width: 8rem;
-  margin-top: 2rem;
+  font-size: 3rem;
 }
 </style>
