@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -41,19 +43,47 @@ export default {
       this.updateSubmitDisabled();
     },
     updateSubmitDisabled() {
-    this.submitDisabled = Object.values(this.errors).some(error => error !== '')
-},
-    registerUser() {
-      // Lógica para registrar al usuario
-      this.$router.push("/login");
+      this.submitDisabled = Object.values(this.errors).some(error => error !== '');
     },
-    validateandsubmit(){
-        this.validateName();
-        this.validatePassword();
-        this.validateRepeat();
-        if (!this.submitDisabled) {
-            this.registerUser(); 
-        }
+    async registerUser() {
+      try {
+        const apiUrl = 'http://localhost:80/api/v1/auth/users'; // Reemplaza con la URL de tu API
+        const userData = {
+          username: this.username,
+          password: this.password,
+          idicon: 0,
+          num_coments:1,
+          comments:"Hey"
+        };
+
+        const response = await axios.post(apiUrl, userData);
+        console.log('Respuesta del servidor:', response.data);
+
+        // Redirige al usuario después de un registro exitoso
+        this.$router.push("/login");
+      } catch (error) {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.error('Server responded with an error status:', error.response.status);
+    console.error('Error data:', error.response.data);
+  } else if (error.request) {
+    // The request was made but no response was received
+    console.error('No response received from the server');
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.error('Error setting up the request:', error.message);
+  }
+}
+
+    },
+    validateAndSubmit() {
+      this.validateName();
+      this.validatePassword();
+      this.validateRepeat();
+      if (!this.submitDisabled) {
+        this.registerUser(); 
+      }
     }
   },
   watch: {
@@ -66,25 +96,26 @@ export default {
 
 
 <template>
-    <form class="Register">
-        <label>
-            <p>Username</p>
-            <input type="text" v-model="username">
-            <div class="error" v-if="errors.username">{{ errors.username }}</div>
-        </label>
-        <label>
-            <p>Password</p>
-            <input type="password" v-model="password">
-            <div class="error" v-if="errors.password">{{ errors.password }}</div>
-        </label>
-        <label>
-            <p>Repeat Password</p>
-            <input type="password" v-model="repeat">
-            <div class="error" v-if="errors.repeat">{{ errors.repeat }}</div>
-        </label>
-        <button @click.prevent="validateandsubmit" :disabled="submitDisabled">Register</button>
-    </form>
+  <form class="Register">
+    <label>
+      <p>Username</p>
+      <input type="text" v-model="username">
+      <div class="error" v-if="errors.username">{{ errors.username }}</div>
+    </label>
+    <label>
+      <p>Password</p>
+      <input type="password" v-model="password">
+      <div class="error" v-if="errors.password">{{ errors.password }}</div>
+    </label>
+    <label>
+      <p>Repeat Password</p>
+      <input type="password" v-model="repeat">
+      <div class="error" v-if="errors.repeat">{{ errors.repeat }}</div>
+    </label>
+    <button @click.prevent="validateAndSubmit" :disabled="submitDisabled">Register</button>
+  </form>
 </template>
+
 
 <style>
 .Register .error {
