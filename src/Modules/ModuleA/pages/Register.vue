@@ -1,26 +1,97 @@
-<script >
-
+<script>
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+      repeat: "",
+      errors: {
+        username: "",
+        password: "",
+        repeat: "",
+      },
+      submitDisabled: false,
+    };
+  },
+  methods: {
+    validateName() {
+      const namelength = this.username.replace(/\s/g, '').length;
+      if (namelength < 4) {
+        this.errors.username = 'Username must be at least 4 characters long';
+      } else {
+        this.errors.username = '';
+      }
+      this.updateSubmitDisabled();
+    },
+    validatePassword() {
+      const passwordLength = this.password.length;
+      if (passwordLength < 8 || this.password.includes(" ")) {
+        this.errors.password = "Password must be at least 8 characters long and cannot contain spaces";
+      } else {
+        this.errors.password = "";
+      }
+      this.updateSubmitDisabled();
+    },
+    validateRepeat() {
+      if (this.password !== this.repeat) {
+        this.errors.repeat = "Passwords do not match";
+      } else {
+        this.errors.repeat = "";
+      }
+      this.updateSubmitDisabled();
+    },
+    updateSubmitDisabled() {
+    this.submitDisabled = Object.values(this.errors).some(error => error !== '')
+},
+    registerUser() {
+      // Lógica para registrar al usuario
+      this.$router.push("/login");
+    },
+    validateandsubmit(){
+        this.validateName();
+        this.validatePassword();
+        this.validateRepeat();
+        if (!this.submitDisabled) {
+            this.registerUser(); 
+        }
+    }
+  },
+  watch: {
+    username: "validateName",
+    password: "validatePassword",
+    repeat: "validateRepeat",
+  },
+};
 </script>
+
 
 <template>
     <form class="Register">
         <label>
             <p>Username</p>
-            <input type="text">
+            <input type="text" v-model="username">
+            <div class="error" v-if="errors.username">{{ errors.username }}</div>
         </label>
         <label>
             <p>Password</p>
-            <input type="text">
+            <input type="password" v-model="password">
+            <div class="error" v-if="errors.password">{{ errors.password }}</div>
         </label>
         <label>
             <p>Repeat Password</p>
-            <input type="text">
+            <input type="password" v-model="repeat">
+            <div class="error" v-if="errors.repeat">{{ errors.repeat }}</div>
         </label>
-        <button>Register</button>
+        <button @click.prevent="validateandsubmit" :disabled="submitDisabled">Register</button>
     </form>
 </template>
 
 <style>
+.Register .error {
+    margin-top: 1rem;
+    color: red;
+    font-size: 12px;
+}
 .Register {
     margin-top: 0rem;
     margin-bottom: 5rem;

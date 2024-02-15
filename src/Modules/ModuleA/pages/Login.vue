@@ -3,21 +3,22 @@
 </script>
 
 <template>
-    <form class="Register">
+    <form class="Login">
         <label>
-            <p>Username</p>
+            <p class="titleform">Username</p>
             <input type="text">
         </label>
         <label>
-            <p>Password</p>
+            <p class="titleform">Password</p>
             <input type="text">
         </label>
-        <button>Register</button>
+        <button>Login</button>
+        <routerLink to ="/Register"><p class="goregister">Press here to register!</p></routerLink>
     </form>
 </template>
 
 <style>
-.Register {
+.Login {
     margin-top: 0rem;
     margin-bottom: 5rem;
     min-height: 42rem;
@@ -26,11 +27,11 @@
     align-items: center;
     justify-content: center;
 }
-.Register label{
+.Login label{
     display: block;
     text-align: center;
 }
-.Register input{
+.Login input{
     height: 4rem;
     width: 20rem;
     margin-top: 0;
@@ -39,14 +40,22 @@
     font-family: 'Mogra', sans-serif;
     font-size: 1.5rem;
 }
-.Register p{
+.Login .goregister{
+    color: white; 
+    font-family: 'Nanum Brush Script', cursive;
+    font-size: 2rem;  
+}
+.Login a{
+    text-decoration: none;
+}
+.Login .titleform{
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     color: #0BFF00;
     font-family: 'Nanum Brush Script', cursive;
     font-size: 4rem; 
 }
-.Register  button{
+.Login  button{
     height: 3.5rem;
     width: 12rem;
     margin-top: 2rem;
