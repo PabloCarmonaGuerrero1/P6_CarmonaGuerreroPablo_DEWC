@@ -67,55 +67,78 @@ export default {
 
 <style>
 .Login .error {
-    margin-top: 1rem;
-    color: red;
-    font-size: 12px;
+  margin-top: 1rem;
+  color: red;
+  font-size: 12px;
 }
+
 .Login {
-    margin-top: 0rem;
-    margin-bottom: 5rem;
-    min-height: 42rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  margin-top: 0rem;
+  margin-bottom: 5rem;
+  min-height: 42rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.Login label{
-    display: block;
-    text-align: center;
+
+.Login label {
+  display: block;
+  text-align: center;
 }
-.Login input{
-    height: 4rem;
-    width: 20rem;
-    margin-top: 0;
-    border-radius: 2.8125rem;
-    text-align: center;
-    font-family: 'Mogra', sans-serif;
-    font-size: 1.5rem;
+
+.Login input {
+  height: 4rem;
+  width: 20rem;
+  margin-top: 0;
+  border-radius: 2.8125rem;
+  text-align: center;
+  font-family: 'Mogra', sans-serif;
+  font-size: 1.5rem;
 }
-.Login .goregister{
-    color: white; 
-    font-family: 'Nanum Brush Script', cursive;
-    font-size: 2rem;  
+
+.Login .goregister {
+  color: white;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 2rem;
 }
-.Login a{
-    text-decoration: none;
+
+.Login a {
+  text-decoration: none;
 }
-.Login .titleform{
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: #0BFF00;
-    font-family: 'Nanum Brush Script', cursive;
-    font-size: 4rem; 
+
+.Login .titleform {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #0BFF00;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 4rem;
 }
-.Login  button{
-    height: 3.5rem;
-    width: 12rem;
-    margin-top: 2rem;
-    border-radius: 2.8125rem;
-    background-color: #2CD824;
-    color: black;
-    font-family: 'Nanum Brush Script', cursive;
+
+.Login button {
+  height: 3.5rem;
+  width: 12rem;
+  margin-top: 2rem;
+  border-radius: 2.8125rem;
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+
+  .Login input {
+    width: 15rem;
+    font-size: 1rem;
+  }
+
+  .Login button {
+    width: 6rem;
+    font-size: 2rem;
+  }
+  .Login .titleform{
     font-size: 3rem;
+  }
 }
 </style>

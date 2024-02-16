@@ -177,4 +177,19 @@ export default {
     font-family: 'Nanum Brush Script', cursive;
     font-size: 3rem;
 }
+@media screen and (max-width: 768px) {
+
+.Register input {
+  width: 15rem;
+  font-size: 1rem;
+}
+
+.Register button {
+  width: 6rem;
+  font-size: 1.75rem;
+}
+.Register p{
+  font-size: 3rem;
+}
+}
 </style>
