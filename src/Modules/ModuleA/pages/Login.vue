@@ -1,23 +1,76 @@
-<script >
+<script>
+import axios from 'axios';
 
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+      errors: {
+        username: '',
+        password: '',
+      },
+      submitDisabled: false,
+    };
+  },
+  methods: {
+    async loginUser() {
+      try {
+        const apiUrl = `http://localhost/api/v1/auth/users/${this.username}`;
+        const response = await axios.get(apiUrl);
+
+        if (response.data) {
+          const user = response.data;
+
+          if (user.password === this.password) {
+            this.$router.push('/homepage');
+          } else {
+            this.errors.password = 'Incorrect password.';
+            this.errors.username = ''; 
+          }
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          this.errors.username = 'User not found.';
+          this.errors.password = ''; 
+        } else if (error.response) {
+          console.error('Server responded with an error status:', error.response.status);
+          console.error('Error data:', error.response.data);
+        } else if (error.request) {
+          console.error('No response received from the server');
+        } else {
+          console.error('Error setting up the request:', error.message);
+        }
+      }
+    },
+  },
+};
 </script>
 
 <template>
-    <form class="Login">
-        <label>
-            <p class="titleform">Username</p>
-            <input type="text">
-        </label>
-        <label>
-            <p class="titleform">Password</p>
-            <input type="text">
-        </label>
-        <button>Login</button>
-        <routerLink to ="/Register"><p class="goregister">Press here to register!</p></routerLink>
-    </form>
+  <form class="Login" @submit.prevent="loginUser">
+    <label>
+      <p class="titleform">Username</p>
+      <input v-model="username" type="text" />
+      <div class="error" v-if="errors.username">{{ errors.username }}</div>
+    </label>
+    <label>
+      <p class="titleform">Password</p>
+      <input v-model="password" type="password" />
+      <div class="error" v-if="errors.password">{{ errors.password }}</div>
+    </label>
+    <button type="submit">Login</button>
+    <router-link to="/Register"><p class="goregister">Press here to register!</p></router-link>
+  </form>
 </template>
 
+
 <style>
+.Login .error {
+    margin-top: 1rem;
+    color: red;
+    font-size: 12px;
+}
 .Login {
     margin-top: 0rem;
     margin-bottom: 5rem;

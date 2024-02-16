@@ -11,17 +11,37 @@ export default {
         username: "",
         password: "",
         repeat: "",
+        usernameTaken: "", 
       },
       submitDisabled: false,
     };
   },
   methods: {
+    async validateUsernameAvailability() {
+      try {
+        const apiUrl = `http://localhost:80/api/v1/auth/users/${this.username}/availability`;
+        const response = await axios.get(apiUrl);
+        this.errors.usernameTaken = '';
+      } catch (error) {
+  if (error.response && error.response.status === 404) {
+    this.errors.usernameTaken = 'Username is already taken';
+  } else {
+    this.errors.usernameTaken = '';
+  }
+  console.error('Error checking username availability:', error);
+}
+
+    },
     validateName() {
       const namelength = this.username.replace(/\s/g, '').length;
       if (namelength < 4) {
         this.errors.username = 'Username must be at least 4 characters long';
+        this.errors.usernameTaken = ''; 
       } else {
         this.errors.username = '';
+
+        
+
       }
       this.updateSubmitDisabled();
     },
@@ -47,42 +67,37 @@ export default {
     },
     async registerUser() {
       try {
-        const apiUrl = 'http://localhost:80/api/v1/auth/users'; // Reemplaza con la URL de tu API
+        const apiUrl = 'http://localhost:80/api/v1/auth/users';
         const userData = {
           username: this.username,
           password: this.password,
           idicon: 0,
-          num_coments:1,
-          comments:"Hey"
+          num_coments: 1,
+          comments: "Hey"
         };
 
         const response = await axios.post(apiUrl, userData);
         console.log('Respuesta del servidor:', response.data);
 
-        // Redirige al usuario después de un registro exitoso
         this.$router.push("/login");
       } catch (error) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.error('Server responded with an error status:', error.response.status);
-    console.error('Error data:', error.response.data);
-  } else if (error.request) {
-    // The request was made but no response was received
-    console.error('No response received from the server');
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.error('Error setting up the request:', error.message);
-  }
-}
-
+        if (error.response) {
+          console.error('Server responded with an error status:', error.response.status);
+          console.error('Error data:', error.response.data);
+        } else if (error.request) {
+          console.error('No response received from the server');
+        } else {
+          console.error('Error setting up the request:', error.message);
+        }
+      }
     },
     validateAndSubmit() {
       this.validateName();
       this.validatePassword();
       this.validateRepeat();
+      this.validateUsernameAvailability();
       if (!this.submitDisabled) {
-        this.registerUser(); 
+        this.registerUser();
       }
     }
   },
@@ -94,13 +109,13 @@ export default {
 };
 </script>
 
-
 <template>
   <form class="Register">
     <label>
       <p>Username</p>
       <input type="text" v-model="username">
       <div class="error" v-if="errors.username">{{ errors.username }}</div>
+      <div class="error" v-if="errors.usernameTaken">{{ errors.usernameTaken }}</div>
     </label>
     <label>
       <p>Password</p>
