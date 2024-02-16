@@ -9,7 +9,7 @@
 
 </template>
 <style>
-.Inicio{
+.Inicio {
     height: 75vh;
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
@@ -18,11 +18,30 @@
     align-items: center;
     color: #0BFF00;
     font-family: 'Nanum Brush Script', cursive;
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
 }
-.Inicio img{
-    max-width: 30rem; 
+
+.Inicio img {
+    max-width: 30rem;
     max-height: auto;
 }
-</style>
+@media screen and (max-width: 1024px) {
+    .Inicio {
+        height: auto;
+        text-align: center;
+    }
 
+    .Inicio h2 {
+        font-size: 1.8rem;
+    }
+
+    .Inicio h3 {
+        font-size: 1.2rem;
+    }
+
+    .Inicio img {
+        max-width: 60%;
+        height: auto;
+    }
+}
+</style>

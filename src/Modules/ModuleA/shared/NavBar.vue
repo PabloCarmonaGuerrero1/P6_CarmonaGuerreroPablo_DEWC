@@ -7,7 +7,7 @@
     </div>
 </template>
 <style>
-.NavBar{
+.NavBar {
     height: 5rem;
     padding: 0 1rem;
     display: flex;
@@ -15,19 +15,22 @@
     align-items: center;
     background-color: #2CD824;
 }
-.NavBar img{
+
+.NavBar img {
     max-width: 3rem;
     max-height: 3rem;
 }
-.NavBar h1{
+
+.NavBar h1 {
     color: black;
     font-family: 'Monofett', sans-serif;
-    font-size: 3rem; 
-
+    font-size: 3rem;
 }
-.NavBar a{
+
+.NavBar a {
     text-decoration: none;
 }
+
 @font-face {
     font-family: "Monofett";
     src: url("@/Modules/ModuleA/fonts/Monofett/Monofett-Regular.ttf") format("truetype");
@@ -37,8 +40,24 @@
     font-family: 'Nanum Brush Script';
     src: url("@/Modules/ModuleA/fonts/LR/NanumBrushScript-Regular.ttf") format('truetype');
 }
+
 @font-face {
     font-family: 'Mogra';
     src: url("@/Modules/ModuleA/fonts/Mogra/Mogra-Regular.ttf") format('truetype');
+}
+
+@media screen and (max-width: 768px) {
+    .NavBar {
+        text-align: center;
+    }
+
+    .NavBar h1 {
+        font-size: 2rem;
+        margin-top: 1rem;
+    }
+    .NavBar img {
+        max-width: 2rem;
+        max-height: 2rem;
+    }
 }
 </style>
