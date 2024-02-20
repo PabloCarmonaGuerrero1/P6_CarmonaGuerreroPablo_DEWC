@@ -1,9 +1,9 @@
 <template>
     <div  class="Footer">
-        <img src="@/assets/icons/instagram 1.png">
-        <img src="@/assets/icons/gorjeo 1.png">
-        <img src="@/assets/icons/facebook 1.png">
-        <img src="@/assets/icons/discordia 1.png">
+        <img src="@/assets/icons/instagram 1.png" alt="instagram">
+        <img src="@/assets/icons/gorjeo 1.png" alt="x">
+        <img src="@/assets/icons/facebook 1.png" alt="facebook">
+        <img src="@/assets/icons/discordia 1.png" alt="discord">
     </div>
 
 </template>

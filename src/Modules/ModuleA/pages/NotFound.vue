@@ -3,7 +3,7 @@
         <h2>404</h2>
         <h3>Oops Something Wrong Happens</h3>
         <router-link to="/HomePage">
-            <img src="@/assets/icons/giphy.gif" alt="Portal Image">
+            <img src="@/assets/icons/giphy.gif" alt="rick-portal">
         </router-link>
     </div>
 

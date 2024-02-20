@@ -3,7 +3,7 @@
         <h2>Welcome to RickReditt!</h2>
         <h3>Press the portal to start</h3>
         <router-link to="/HomePage">
-            <img src="@/assets/icons/giphy.gif" alt="Portal Image">
+            <img src="@/assets/icons/giphy.gif" alt="rick-portal">
         </router-link>
     </div>
 
@@ -25,22 +25,24 @@
     max-width: 30rem;
     max-height: auto;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .Inicio {
-        height: auto;
+        height: 40rem;
+        margin-top: 6rem;
+        margin-bottom: 4rem;
         text-align: center;
     }
 
     .Inicio h2 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
     .Inicio h3 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
     .Inicio img {
-        max-width: 60%;
+        max-width: 70%;
         height: auto;
     }
 }
