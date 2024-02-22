@@ -14,7 +14,7 @@ export default {
   methods: {
     async getUserInfo() {
       try {
-        const apiUrl = 'http://localhost/api/v1/auth/users/juan'; // En futuras entrega se verá el usuario que ha iniciado sesion
+        const apiUrl = 'http://localhost/api/v1/users/nuevo_usuario'; // En futuras entrega se verá el usuario que ha iniciado sesion
         const response = await axios.get(apiUrl);
         this.userInfo = response.data;
       } catch (error) {
@@ -76,10 +76,11 @@ export default {
         <div class="friends-box">
           <p class="friend-title">Friends</p>
           <div class="friend-list">
-            <router-link to="/other-user"><p>Jun</p></router-link>
-            <p>Humanoid</p>
-            <p>Noah</p>
-            <p>Supa</p>
+            <ul>
+              <router-link to="/other-user"><li v-for="(friend, index) in userInfo.friends_list" :key="index">
+              <template v-if="index !== 0">{{ friend }}</template>
+              </li></router-link>
+    </ul>
           </div>
         </div>
       </div>

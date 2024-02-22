@@ -16,7 +16,7 @@ export default {
   methods: {
     async loginUser() {
       try {
-        const apiUrl = `http://localhost/api/v1/auth/users/${this.username}`;
+        const apiUrl = `http://localhost/api/v1/users/${this.username}`;
         const response = await axios.get(apiUrl);
 
         if (response.data) {

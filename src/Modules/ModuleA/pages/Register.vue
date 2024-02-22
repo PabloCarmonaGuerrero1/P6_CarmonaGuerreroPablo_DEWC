@@ -19,7 +19,7 @@ export default {
   methods: {
     async validateUsernameAvailability() {
       try {
-        const apiUrl = `http://localhost:80/api/v1/auth/users/${this.username}/availability`;
+        const apiUrl = `http://localhost:80/api/auth/users/${this.username}/availability`;
         const response = await axios.get(apiUrl);
         this.errors.usernameTaken = '';
       } catch (error) {
@@ -67,13 +67,13 @@ export default {
     },
     async registerUser() {
       try {
-        const apiUrl = 'http://localhost:80/api/v1/auth/users';
+        const apiUrl = 'http://localhost:80/api/v1/users';
         const userData = {
           username: this.username,
           password: this.password,
           idicon: 0,
-          num_coments: 1,
-          comments: "Hey"
+          num_coments: 0,
+          friends_list: '["K"]'
         };
 
         const response = await axios.post(apiUrl, userData);
