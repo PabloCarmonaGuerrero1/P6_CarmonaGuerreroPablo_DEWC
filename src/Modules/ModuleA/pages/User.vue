@@ -5,20 +5,31 @@ export default {
   data() {
     return {
       userInfo: {},
+      userFriends: [],
       userAvatar: '@/assets/icons/perfil.png', // Aquí se verá una imagen de perfil a elección del usuario en futuras entregas
     };
   },
   mounted() {
     this.getUserInfo();
+    this.getUserFriends();
   },
   methods: {
     async getUserInfo() {
       try {
-        const apiUrl = 'http://localhost/api/v1/users/nuevo_usuario'; // En futuras entrega se verá el usuario que ha iniciado sesion
+        const apiUrl = 'http://localhost/api/v1/users/Orejas'; // En futuras entrega se verá el usuario que ha iniciado sesion
         const response = await axios.get(apiUrl);
         this.userInfo = response.data;
       } catch (error) {
         console.error('Error fetching user information:', error);
+      }
+    },
+    async getUserFriends() {
+      try {
+        const apiUrl = 'http://localhost/api/v1/friendships/Orejas'; // Ajusta la URL con el nombre de usuario
+        const response = await axios.get(apiUrl);
+        this.userFriends = response.data;
+      } catch (error) {
+        console.error('Error fetching user friends:', error);
       }
     },
   },
@@ -77,10 +88,8 @@ export default {
           <p class="friend-title">Friends</p>
           <div class="friend-list">
             <ul>
-              <router-link to="/other-user"><li v-for="(friend, index) in userInfo.friends_list" :key="index">
-              <template v-if="index !== 0">{{ friend }}</template>
-              </li></router-link>
-    </ul>
+            <li v-for="friend in userFriends" :key="friend">{{ friend }}</li>
+          </ul>
           </div>
         </div>
       </div>

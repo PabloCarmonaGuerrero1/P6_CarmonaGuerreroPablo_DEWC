@@ -1,7 +1,26 @@
-<script >
+<script>
+import axios from 'axios';
 
+export default {
+  methods: {
+    addFriendship() {
+
+      const friendshipData = {
+        username: 'Orejas', 
+        username_friend: 'nadie', 
+      };
+
+      axios.post('http://localhost/api/v1/friendships', friendshipData)
+        .then(response => {
+          console.log('Amistad creada exitosamente:', response.data);
+        })
+        .catch(error => {
+          console.error('Error al crear la amistad:', error.response.data);
+        });
+    },
+  },
+};
 </script>
-
 <template>
     <div class="other-user-profile">
         <div class="other-profile-box">
@@ -9,6 +28,7 @@
             <div class="other-info">
                 <p class="username">x</p>
                 <p class="comments">Comments </p>
+                <button @click="addFriendship">Añadir Amistad</button>
             </div>
         </div>
         <div class="other-comments">
