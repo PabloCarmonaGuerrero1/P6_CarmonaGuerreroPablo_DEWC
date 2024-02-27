@@ -48,6 +48,7 @@ export default {
         <img src="@/assets/icons/perfil.png" alt="User Avatar">
         <div class="user-info">
           <p class="username">{{ userInfo.username }}</p>
+          <p class="comments">Comments</p>
           <p class="comments">{{ userInfo.num_comments }}</p>
         </div>
       </div>
