@@ -26,9 +26,9 @@ export default {
     },
     async getUserFriends() {
       try {
-        const apiUrl = 'http://localhost/api/v1/users/${storedUsername}'; // Ajusta la URL con el nombre de usuario
+        const apiUrl = `http://localhost/api/v1/friendships/${storedUsername}`; 
         const response = await axios.get(apiUrl);
-        this.userFriends = response.data;
+        this.userFriends = response.data.map(friendship => friendship.username_friend);
       } catch (error) {
         console.error('Error fetching user friends:', error);
       }
@@ -47,8 +47,9 @@ export default {
         <img src="@/assets/icons/perfil.png" alt="User Avatar">
         <div class="user-info">
           <p class="username">{{ userInfo.username }}</p>
-          <p class="comments">Comments {{ userInfo.num_comments }}</p>
-          <button @click="logout">Logout</button> 
+          <p class="comments">Comments</p>
+          <p class="comments">{{ userInfo.num_comments }}</p>
+          <button @click="logout">Logout</button>
         </div>
       </div>
       <div class="user-comments">
@@ -94,7 +95,7 @@ export default {
           <p class="friend-title">Friends</p>
           <div class="friend-list">
             <ul>
-            <li v-for="friend in userFriends" :key="friend">{{ friend }}</li>
+            <router-link to="/other-user"><li v-for="friend in userFriends" :key="friend">{{ friend }}</li></router-link>
           </ul>
           </div>
         </div>
