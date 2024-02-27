@@ -26,6 +26,7 @@ export default {
     },
     async getUserFriends() {
       try {
+        const storedUsername = localStorage.getItem('username');
         const apiUrl = `http://localhost/api/v1/friendships/${storedUsername}`; 
         const response = await axios.get(apiUrl);
         this.userFriends = response.data.map(friendship => friendship.username_friend);
