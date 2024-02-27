@@ -26,7 +26,7 @@ export default {
     },
     async getUserFriends() {
       try {
-        const apiUrl = 'http://localhost/api/v1/friendships/Orejas'; // Ajusta la URL con el nombre de usuario
+        const apiUrl = `http://localhost/api/v1/friendships/${storedUsername}` // Ajusta la URL con el nombre de usuario
         const response = await axios.get(apiUrl);
         this.userFriends = response.data;
       } catch (error) {
