@@ -28,7 +28,8 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-const isLoggedIn = true;
+const storedUsername = localStorage.getItem('username');
+const isLoggedIn = !!storedUsername;
 
 router.beforeEach((to, from, next) => {
   if (to.path !== '/user' || isLoggedIn) {
