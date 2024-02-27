@@ -33,6 +33,10 @@ export default {
         console.error('Error fetching user friends:', error);
       }
     },
+    logout() {
+      localStorage.removeItem('username');
+      this.$router.push('/login');
+    },
   },
 };
 </script>
@@ -44,6 +48,7 @@ export default {
         <div class="user-info">
           <p class="username">{{ userInfo.username }}</p>
           <p class="comments">Comments {{ userInfo.num_comments }}</p>
+          <button @click="logout">Logout</button> 
         </div>
       </div>
       <div class="user-comments">
