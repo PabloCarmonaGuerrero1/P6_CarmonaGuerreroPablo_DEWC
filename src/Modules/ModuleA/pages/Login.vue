@@ -23,6 +23,7 @@ export default {
           const user = response.data;
 
           if (user.password === this.password) {
+            localStorage.setItem("username",this.username)
             this.$router.push('/homepage');
           } else {
             this.errors.password = 'Incorrect password.';
