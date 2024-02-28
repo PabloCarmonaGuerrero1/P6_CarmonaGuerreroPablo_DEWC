@@ -67,7 +67,9 @@ export default {
             <div class="other-info">
               <p class="username">{{ otherUserInfo.username }}</p>
               <p class="comments">Comments: {{ otherUserInfo.num_comments }}</p>
-              <button @click="addFriendship">Añadir Amistad</button>
+              <button @click="toggleFriendship">
+          {{ isFriend ? 'Dejar de ser Amigo' : 'Añadir Amistad' }}
+        </button>
             </div>
         </div>
         <div class="other-comments">
