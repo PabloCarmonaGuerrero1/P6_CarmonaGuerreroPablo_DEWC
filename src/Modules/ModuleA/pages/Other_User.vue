@@ -5,27 +5,40 @@ export default {
   data() {
     return {
       otherUserInfo: {},
+      isFriend: false,
     };
   },
   mounted() {
     const selectedFriend = localStorage.getItem('selectedFriend');
     this.getUserInfo(selectedFriend);
+    this.checkFriendshipStatus(selectedFriend);
   },
   methods: {
-    addFriendship() {
+    async toggleFriendship() {
+      const selectedFriend = localStorage.getItem('selectedFriend');
+      const username = localStorage.getItem('username');
+      
+      if (this.isFriend) {
+        try {
+          await axios.delete(`http://localhost/api/v1/friendships/${selectedFriend}`);
+          console.log('Amistad eliminada exitosamente');
+        } catch (error) {
+          console.error('Error al eliminar la amistad:', error.response.data);
+        }
+      } else {
+        const friendshipData = {
+          username: username,
+          username_friend: selectedFriend,
+        };
 
-      const friendshipData = {
-        username: 'Orejas', 
-        username_friend: 'nadie', 
-      };
-
-      axios.post('http://localhost/api/v1/friendships', friendshipData)
-        .then(response => {
-          console.log('Amistad creada exitosamente:', response.data);
-        })
-        .catch(error => {
+        try {
+          await axios.post('http://localhost/api/v1/friendships', friendshipData);
+          console.log('Amistad creada exitosamente');
+        } catch (error) {
           console.error('Error al crear la amistad:', error.response.data);
-        });
+        }
+      }
+      this.isFriend = !this.isFriend;
     },
     async getUserInfo(username) {
       try {
@@ -34,6 +47,14 @@ export default {
         this.otherUserInfo = response.data;
       } catch (error) {
         console.error('Error fetching other user information:', error);
+      }
+    },
+    async checkFriendshipStatus(username) {
+      try {
+        const response = await axios.get(`http://localhost/api/v1/friendships/${username}`);
+        this.isFriend = response.data.length > 0;
+      } catch (error) {
+        console.error('Error checking friendship status:', error);
       }
     },
   },
