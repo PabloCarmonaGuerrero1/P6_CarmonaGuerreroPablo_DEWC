@@ -20,7 +20,7 @@ export default {
       
       try {
         if (this.isFriend) {
-          await axios.delete(`http://localhost/api/v1/friendships/${selectedFriend}`);
+          await axios.delete(`http://localhost/api/v1/friendships/${username}`);
           console.log('Amistad eliminada exitosamente');
         } else {
           const friendshipData = {
