@@ -18,27 +18,23 @@ export default {
       const selectedFriend = localStorage.getItem('selectedFriend');
       const username = localStorage.getItem('username');
       
-      if (this.isFriend) {
-        try {
+      try {
+        if (this.isFriend) {
           await axios.delete(`http://localhost/api/v1/friendships/${selectedFriend}`);
           console.log('Amistad eliminada exitosamente');
-        } catch (error) {
-          console.error('Error al eliminar la amistad:', error.response.data);
-        }
-      } else {
-        const friendshipData = {
-          username: username,
-          username_friend: selectedFriend,
-        };
-
-        try {
+        } else {
+          const friendshipData = {
+            username: username,
+            username_friend: selectedFriend,
+          };
+  
           await axios.post('http://localhost/api/v1/friendships', friendshipData);
           console.log('Amistad creada exitosamente');
-        } catch (error) {
-          console.error('Error al crear la amistad:', error.response.data);
         }
+        this.isFriend = !this.isFriend;
+      } catch (error) {
+        console.error('Error al manejar la amistad:', error.response.data);
       }
-      this.isFriend = !this.isFriend;
     },
     async getUserInfo(username) {
       try {
