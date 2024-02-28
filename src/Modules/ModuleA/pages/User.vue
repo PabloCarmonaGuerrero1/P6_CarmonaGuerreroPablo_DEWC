@@ -38,6 +38,10 @@ export default {
       localStorage.removeItem('username');
       this.$router.push('/login');
     },
+    saveFriendAndNavigate(usernameFriend) {
+      localStorage.setItem('selectedFriend', usernameFriend);
+      this.$router.push('/other-user');
+    },
   },
 };
 </script>
@@ -96,7 +100,9 @@ export default {
           <p class="friend-title">Friends</p>
           <div class="friend-list">
             <ul>
-            <router-link to="/other-user"><li v-for="friend in userFriends" :key="friend">{{ friend }}</li></router-link>
+              <li v-for="friend in userFriends" :key="friend">
+            <router-link @click="saveFriendAndNavigate(friend)" to="/other-user">{{ friend }}</router-link>
+          </li>
           </ul>
           </div>
         </div>
