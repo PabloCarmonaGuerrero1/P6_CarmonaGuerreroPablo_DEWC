@@ -17,7 +17,7 @@ export default {
     async getUserInfo() {
       try {
         const storedUsername = localStorage.getItem('username');
-        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; // En futuras entrega se verá el usuario que ha iniciado sesion
+        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
         const response = await axios.get(apiUrl);
         this.userInfo = response.data;
       } catch (error) {

@@ -2,10 +2,24 @@
     <div class="NavBar">
         <router-link to ="/Contact"><img src="@/assets/icons/telefono.png" alt="contact-page"></router-link> 
         <router-link to ="/"><h1>Rick & Morty</h1></router-link>
-        <router-link to ="/Login"><img src="@/assets/icons/perfil.png" alt="login-user"> </router-link>
-        
-    </div>
+        <template v-if="!username">
+      <router-link to="/Login"><img src="@/assets/icons/perfil.png" alt="login-user"></router-link>
+    </template>
+    <template v-else>
+      <router-link to="/user"><img src="@/assets/icons/perfil.png" alt="user-profile"></router-link>
+    </template>
+  </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      username: localStorage.getItem('username'),
+    };
+  },
+};
+</script>
 <style>
 .NavBar {
     height: 5rem;

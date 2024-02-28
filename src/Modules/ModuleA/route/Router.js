@@ -28,8 +28,6 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-const storedUsername = localStorage.getItem('username');
-const isLoggedIn = !!storedUsername;
 
 router.beforeEach((to, from, next) => {
   const storedUsername = localStorage.getItem('username');
