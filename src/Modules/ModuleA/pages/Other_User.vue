@@ -2,6 +2,15 @@
 import axios from 'axios';
 
 export default {
+  data() {
+    return {
+      otherUserInfo: {},
+    };
+  },
+  mounted() {
+    const selectedFriend = localStorage.getItem('selectedFriend');
+    this.getUserInfo(selectedFriend);
+  },
   methods: {
     addFriendship() {
 
@@ -18,6 +27,15 @@ export default {
           console.error('Error al crear la amistad:', error.response.data);
         });
     },
+    async getUserInfo(username) {
+      try {
+        const apiUrl = `http://localhost/api/v1/users/${username}`;
+        const response = await axios.get(apiUrl);
+        this.otherUserInfo = response.data;
+      } catch (error) {
+        console.error('Error fetching other user information:', error);
+      }
+    },
   },
 };
 </script>
@@ -26,9 +44,9 @@ export default {
         <div class="other-profile-box">
             <img src="@/assets/icons/perfil.png" alt="User Avatar">
             <div class="other-info">
-                <p class="username">x</p>
-                <p class="comments">Comments </p>
-                <button @click="addFriendship">Añadir Amistad</button>
+              <p class="username">{{ otherUserInfo.username }}</p>
+              <p class="comments">Comments: {{ otherUserInfo.num_comments }}</p>
+              <button @click="addFriendship">Añadir Amistad</button>
             </div>
         </div>
         <div class="other-comments">
