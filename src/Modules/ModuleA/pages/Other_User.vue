@@ -79,7 +79,7 @@ export default {
         console.error('Error checking friendship status:', error);
         this.isFriend = false;
         // Guarda el estado de isFriend en localStorage
-        localStorage.setItem('isFriend', 'false');
+        localStorage.setItem('isFriend', 'true');
       }
     },
   },
