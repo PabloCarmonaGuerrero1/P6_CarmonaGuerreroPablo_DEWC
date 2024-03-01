@@ -5,18 +5,16 @@ export default {
   data() {
     return {
       otherUserInfo: {},
-      isFriend: false,
     };
   },
-  async mounted() {
-  const username = localStorage.getItem('username');
-  if (username) {
-    const isFriendStored = localStorage.getItem('isFriend');
-    this.isFriend = isFriendStored === 'true';
-    await this.loadUserData();
-    console.log(this.isFriend);
-  }
-},
+  created() {
+    const username = localStorage.getItem('username');
+    if (username) {
+      const isFriendStored = localStorage.getItem('isFriend');
+      this.isFriend = isFriendStored === 'true';
+      this.loadUserData();
+    }
+  },
   methods: {
     async loadUserData() {
       const username = localStorage.getItem('username')
