@@ -8,6 +8,9 @@ export default {
       isFriend: false,
     };
   },
+  beforeMount() {
+    this.loadUserData();
+  },
   mounted() {
   const username = localStorage.getItem('username')
   if (username) {
@@ -18,15 +21,17 @@ export default {
     async loadUserData() {
   const username = localStorage.getItem('username')
   const selectedFriend = localStorage.getItem('selectedFriend')
-  console.log(username)
-  console.log(this.isFriend)
+  const isFriendFromLocalStorage = localStorage.getItem('isFriend') === 'true'
 
-  try {
-    this.isFriend = await this.checkFriendshipStatus(username, selectedFriend)
-    await this.getUserInfo(selectedFriend)
-    console.log(this.isFriend)
-  } catch (error) {
-    console.error('Error loading user data:', error)
+  if (isFriendFromLocalStorage) {
+    this.isFriend = true
+  } else {
+    try {
+      this.isFriend = await this.checkFriendshipStatus(username, selectedFriend)
+      await this.getUserInfo(selectedFriend)
+    } catch (error) {
+      console.error('Error loading user data:', error)
+    }
   }
 },
 
