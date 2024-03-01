@@ -8,28 +8,27 @@ export default {
       isFriend: false,
     };
   },
-  async mounted() {
-  const username = localStorage.getItem('username');
+  mounted() {
+  const username = localStorage.getItem('username')
   if (username) {
-    this.isFriend = localStorage.getItem('isFriend') === 'true';
-    await this.loadUserData();
-    console.log(this.isFriend);
+    this.loadUserData()
   }
 },
   methods: {
     async loadUserData() {
-      const username = localStorage.getItem('username')
-      const selectedFriend = localStorage.getItem('selectedFriend');
-      console.log(username);
-      console.log(this.isFriend)
-      try {
-        await this.checkFriendshipStatus(username, selectedFriend);
-        await this.getUserInfo(selectedFriend);
-        console.log(this.isFriend)
-      } catch (error) {
-        console.error('Error loading user data:', error);
-      }
-    },
+  const username = localStorage.getItem('username')
+  const selectedFriend = localStorage.getItem('selectedFriend')
+  console.log(username)
+  console.log(this.isFriend)
+
+  try {
+    await this.checkFriendshipStatus(username, selectedFriend)
+    await this.getUserInfo(selectedFriend)
+    console.log(this.isFriend)
+  } catch (error) {
+    console.error('Error loading user data:', error)
+  }
+},
 
     async toggleFriendship() {
       const selectedFriend = localStorage.getItem('selectedFriend');
