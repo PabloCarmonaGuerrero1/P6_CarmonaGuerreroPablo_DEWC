@@ -22,7 +22,7 @@ export default {
   console.log(this.isFriend)
 
   try {
-    await this.checkFriendshipStatus(username, selectedFriend)
+    this.isFriend = await this.checkFriendshipStatus(username, selectedFriend)
     await this.getUserInfo(selectedFriend)
     console.log(this.isFriend)
   } catch (error) {
@@ -65,15 +65,16 @@ export default {
     },
 
     async checkFriendshipStatus(username, selectedFriend) {
-      try {
-        const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
-        this.isFriend = response.data.length > 0;
-        localStorage.setItem('isFriend', this.isFriend ? 'true' : 'false');
-      }catch (error) {
-        console.error('Error checking friendship status:', error);
-        this.isFriend = false;
-      }
-    },
+  let isFriend = false
+  try {
+    const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`)
+    isFriend = response.data.length > 0
+    localStorage.setItem('isFriend', isFriend ? 'true' : 'false')
+  } catch (error) {
+    console.error('Error checking friendship status:', error)
+  }
+  return isFriend
+},
   },
 };
 </script>
