@@ -11,7 +11,6 @@ export default {
   async mounted() {
   const username = localStorage.getItem('username');
   if (username) {
-    this.isFriend = localStorage.getItem('isFriend') === 'true';
     await this.loadUserData();
     console.log(this.isFriend);
   }
@@ -40,6 +39,7 @@ export default {
         if (this.isFriend) {
           await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
           console.log('Amistad eliminada exitosamente');
+          this.isFriend=false
         } else {
           const friendshipData = {
             username: username,
@@ -48,8 +48,8 @@ export default {
 
           await axios.post('http://localhost/api/v1/friendships', friendshipData);
           console.log('Amistad creada exitosamente');
+          this.isFriend=true
         }
-        this.isFriend = !this.isFriend;
       } catch (error) {
         console.error('Error al manejar la amistad:', error.response.data);
       }
@@ -69,7 +69,6 @@ export default {
       try {
         const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
         this.isFriend = response.data.length > 0;
-        localStorage.setItem('isFriend', this.isFriend ? 'true' : 'false');
       }catch (error) {
         console.error('Error checking friendship status:', error);
         this.isFriend = false;
