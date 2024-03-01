@@ -1,13 +1,13 @@
 <template>
     <div class="Inicio">
         <h2>Welcome to RickReditt!</h2>
-        <h3>Press the portal to start</h3>
+        <h3>A social network where you can freely interact with other users, expressing your comments on any topic, but mainly focused on discussions related to Rick and Morty</h3>
         <router-link to="/HomePage">
             <img src="@/assets/icons/giphy.gif" alt="rick-portal">
         </router-link>
     </div>
-
 </template>
+
 <style>
 .Inicio {
     height: 75vh;
@@ -21,13 +21,19 @@
     font-size: 1.5rem;
 }
 
+.Inicio h3 {
+    word-wrap: break-word;  
+    max-width: 50rem;
+}
+
 .Inicio img {
     max-width: 30rem;
     max-height: auto;
 }
+
 @media screen and (max-width: 768px) {
     .Inicio {
-        height: 40rem;
+        height: auto;  
         margin-top: 6rem;
         margin-bottom: 4rem;
         text-align: center;
@@ -39,6 +45,7 @@
 
     .Inicio h3 {
         font-size: 1.5rem;
+        max-width: 80%;  
     }
 
     .Inicio img {

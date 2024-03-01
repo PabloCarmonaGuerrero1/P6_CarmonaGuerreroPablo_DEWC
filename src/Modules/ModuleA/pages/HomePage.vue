@@ -40,57 +40,94 @@
 </template>
 
 <style>
-.Comentarios{
-    min-height: 48.5rem;
-    margin-left: 9.4375rem;
-    margin-top: 3rem;
+.Comentarios {
+  min-height: 48.5rem;
+  margin-left: 9.4375rem;
+  margin-top: 3rem;
 }
-.Mensaje{
-    width: 60rem;
-    margin-bottom: 3rem;
-    padding: 1rem;
-    border-radius: 1.875rem;
-    display: flex;
-    background-color: #2E3244;
-    color: white;
-    font-family: 'Mogra', sans-serif;
-    font-size: 1rem;
+
+.Mensaje {
+  width: 60rem;
+  margin-bottom: 3rem;
+  padding: 1rem;
+  border-radius: 1.875rem;
+  display: flex;
+  background-color: #2E3244;
+  color: white;
+  font-family: 'Mogra', sans-serif;
+  font-size: 1rem;
 }
+
 .image-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .user-icon {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
 }
+
 .content-container {
-    flex-grow: 1;
+  flex-grow: 1;
 }
+
 .post-header {
-    margin: 0;
-    display: flex;
-    align-items: center;
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
+
 .username {
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-    margin-left: 6rem;
-    font-size: 1.25rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  margin-left: 6rem;
+  font-size: 1.25rem;
 }
-.date{
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-    margin-left: 3rem;
-    font-size: 1.25rem;
+
+.date {
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  margin-left: 3rem;
+  font-size: 1.25rem;
 }
+
 .post-content span {
-    color: #0BFF00;
+  color: #0BFF00;
 }
-.post-content{
-    margin-left: 1rem;
-    margin-top: 0;
+
+.post-content {
+  margin-left: 1rem;
+  margin-top: 0;
+}
+
+
+@media (max-width: 768px) {
+  .Comentarios {
+    margin-left: 2rem;
+  }
+
+  .Mensaje {
+    max-width: 15rem;
+    margin-left: 0;
+  }
+    .user-icon{
+        max-width: 2rem;
+        max-height: 2rem;
+}
+  .username {
+    margin-left: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .date {
+    margin-left: 2rem;
+    font-size: 0.75rem;
+  }
+  .post-content{
+    font-size: 0.75rem;
+  }
 }
 </style>
