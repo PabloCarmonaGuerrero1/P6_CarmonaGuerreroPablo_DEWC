@@ -1,6 +1,6 @@
 <template>
     <div class="NavBar">
-        <router-link to ="/Contact"><img src="@/assets/icons/telefono.png" alt="contact-page"></router-link> 
+        <router-link to ="/Contact"><img src="@/assets/icons/charlando.png" alt="contact-page"></router-link> 
         <router-link to ="/"><h1>Rick & Morty</h1></router-link>
         <template v-if="!username">
       <router-link to="/Login"><img src="@/assets/icons/perfil.png" alt="login-user"></router-link>
