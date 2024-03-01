@@ -11,6 +11,8 @@ export default {
   async mounted() {
   const username = localStorage.getItem('username');
   if (username) {
+    const isFriendStored = localStorage.getItem('isFriend');
+    this.isFriend = isFriendStored === 'true';
     await this.loadUserData();
     console.log(this.isFriend);
   }
@@ -79,7 +81,7 @@ export default {
         console.error('Error checking friendship status:', error);
         this.isFriend = false;
         // Guarda el estado de isFriend en localStorage
-        localStorage.setItem('isFriend', 'true');
+        localStorage.setItem('isFriend', 'false');
       }
     },
   },
