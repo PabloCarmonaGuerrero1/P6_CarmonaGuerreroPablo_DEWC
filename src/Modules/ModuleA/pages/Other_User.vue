@@ -10,7 +10,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('getFriendStatus', ['getFriendStatus']),
+    ...mapGetters(['getFriendStatus']),
+    getFriendshipButtonText() {
+      return this.getFriendStatus ? 'Dejar de ser Amigo' : 'Añadir Amistad';
+    },
   },
   created() {
     const username = localStorage.getItem('username');
@@ -100,7 +103,7 @@ export default {
         <p class="username">{{ otherUserInfo.username }}</p>
         <p class="comments">Comments: {{ otherUserInfo.num_comments }}</p>
         <button @click="toggleFriendship">
-          {{ isFriend ? 'Dejar de ser Amigo' : 'Añadir Amistad' }}
+          {{ getFriendshipButtonText}}
         </button>
             </div>
         </div>
