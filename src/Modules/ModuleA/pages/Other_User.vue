@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-
+import store from './store';
 export default {
   data() {
     return {
@@ -11,9 +11,14 @@ export default {
     const username = localStorage.getItem('username');
     if (username) {
       const isFriendStored = localStorage.getItem('isFriend');
-      this.isFriend = isFriendStored === 'true';
+      store.dispatch('updateFriendStatus', isFriendStored === 'true');
       this.loadUserData();
     }
+  },
+  computed: {
+    isFriend() {
+      return store.getters.getFriendStatus;
+    },
   },
   methods: {
     async loadUserData() {
@@ -49,7 +54,7 @@ export default {
         }
 
         // Actualiza isFriend después de la operación
-        this.isFriend = !this.isFriend;
+        store.dispatch('updateFriendStatus', !this.isFriend);
 
         // Guarda el estado de isFriend en localStorage
         localStorage.setItem('isFriend', this.isFriend.toString());
@@ -71,13 +76,13 @@ export default {
     async checkFriendshipStatus(username, selectedFriend) {
       try {
         const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
-        this.isFriend = response.data.length > 0;
+        store.dispatch('updateFriendStatus', response.data.length > 0);
 
         // Guarda el estado de isFriend en localStorage
-        localStorage.setItem('isFriend', this.isFriend.toString());
+        localStorage.setItem('isFriend', store.getters.getFriendStatus.toString());
       } catch (error) {
         console.error('Error checking friendship status:', error);
-        this.isFriend = false;
+        store.dispatch('updateFriendStatus', false);
         // Guarda el estado de isFriend en localStorage
         localStorage.setItem('isFriend', 'false');
       }
