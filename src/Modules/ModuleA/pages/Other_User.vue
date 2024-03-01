@@ -21,43 +21,43 @@ export default {
     async loadUserData() {
   const username = localStorage.getItem('username')
   const selectedFriend = localStorage.getItem('selectedFriend')
-  const isFriendFromLocalStorage = localStorage.getItem('isFriend') === 'true'
 
-  if (isFriendFromLocalStorage) {
-    this.isFriend = true
-  } else {
-    try {
-      this.isFriend = await this.checkFriendshipStatus(username, selectedFriend)
+  try {
+    if (localStorage.getItem('isFriend') === 'true') {
+      this.isFriend = true
+    } else {
+      const isFriendFromLocalStorage = await this.checkFriendshipStatus(username, selectedFriend)
+      this.isFriend = isFriendFromLocalStorage
       await this.getUserInfo(selectedFriend)
-    } catch (error) {
-      console.error('Error loading user data:', error)
     }
+  } catch (error) {
+    console.error('Error loading user data:', error)
   }
 },
+async toggleFriendship() {
+  const selectedFriend = localStorage.getItem('selectedFriend')
+  const username = localStorage.getItem('username')
 
-    async toggleFriendship() {
-      const selectedFriend = localStorage.getItem('selectedFriend');
-      const username = localStorage.getItem('username');
-      console.log(username);
-
-      try {
-        if (this.isFriend) {
-          await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
-          console.log('Amistad eliminada exitosamente');
-        } else {
-          const friendshipData = {
-            username: username,
-            username_friend: selectedFriend,
-          };
-
-          await axios.post('http://localhost/api/v1/friendships', friendshipData);
-          console.log('Amistad creada exitosamente');
-        }
-        this.isFriend = !this.isFriend;
-      } catch (error) {
-        console.error('Error al manejar la amistad:', error.response.data);
+  try {
+    if (this.isFriend) {
+      await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`)
+      localStorage.setItem('isFriend', 'false')
+      console.log('Amistad eliminada exitosamente')
+    } else {
+      const friendshipData = {
+        username: username,
+        username_friend: selectedFriend,
       }
-    },
+
+      await axios.post('http://localhost/api/v1/friendships', friendshipData)
+      localStorage.setItem('isFriend', 'true')
+      console.log('Amistad creada exitosamente')
+    }
+    this.isFriend = !this.isFriend
+  } catch (error) {
+    console.error('Error al manejar la amistad:', error.response.data)
+  }
+},
 
     async getUserInfo(username) {
       try {
