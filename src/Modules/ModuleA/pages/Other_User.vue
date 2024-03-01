@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import store from './store';
+import store from '@Modules/ModuleA/components/store.js';
 export default {
   data() {
     return {
