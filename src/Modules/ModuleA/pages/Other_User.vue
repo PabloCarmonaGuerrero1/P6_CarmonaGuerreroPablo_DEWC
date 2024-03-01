@@ -28,8 +28,8 @@ export default {
     } else {
       const isFriendFromLocalStorage = await this.checkFriendshipStatus(username, selectedFriend)
       this.isFriend = isFriendFromLocalStorage
-      await this.getUserInfo(selectedFriend)
     }
+    await this.getUserInfo(selectedFriend)
   } catch (error) {
     console.error('Error loading user data:', error)
   }
