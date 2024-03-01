@@ -1,11 +1,16 @@
 <script>
+import { mapGetters } from 'vuex';
 import axios from 'axios';
 import store from '@/Modules/ModuleA/components/store';
+
 export default {
   data() {
     return {
       otherUserInfo: {},
     };
+  },
+  computed: {
+    ...mapGetters('getFriendStatus', ['getFriendStatus']),
   },
   created() {
     const username = localStorage.getItem('username');
@@ -15,11 +20,6 @@ export default {
       this.loadUserData();
     }
   },
-  computed: {
-    isFriend() {
-      return store.getters.getFriendStatus;
-    },
-  },
   methods: {
     async loadUserData() {
       const username = localStorage.getItem('username')
@@ -28,7 +28,7 @@ export default {
       try {
         await this.checkFriendshipStatus(username, selectedFriend);
         await this.getUserInfo(selectedFriend);
-        console.log(this.isFriend)
+        console.log(this.getFriendStatus);
       } catch (error) {
         console.error('Error loading user data:', error);
       }
@@ -40,7 +40,7 @@ export default {
       console.log(username);
 
       try {
-        if (this.isFriend) {
+        if (this.getFriendStatus) {
           await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
           console.log('Amistad eliminada exitosamente');
         } else {
@@ -54,10 +54,10 @@ export default {
         }
 
         // Actualiza isFriend después de la operación
-        store.dispatch('updateFriendStatus', !this.isFriend);
+        store.dispatch('updateFriendStatus', !this.getFriendStatus);
 
         // Guarda el estado de isFriend en localStorage
-        localStorage.setItem('isFriend', this.isFriend.toString());
+        localStorage.setItem('isFriend', this.getFriendStatus.toString());
       } catch (error) {
         console.error('Error al manejar la amistad:', error.response.data);
       }
