@@ -20,7 +20,6 @@ export default {
       const username = localStorage.getItem('username')
       const selectedFriend = localStorage.getItem('selectedFriend');
       console.log(username);
-      console.log(this.isFriend)
       try {
         await this.checkFriendshipStatus(username, selectedFriend);
         await this.getUserInfo(selectedFriend);
@@ -31,29 +30,30 @@ export default {
     },
 
     async toggleFriendship() {
-      const selectedFriend = localStorage.getItem('selectedFriend');
-      const username = localStorage.getItem('username');
-      console.log(username);
+  const selectedFriend = localStorage.getItem('selectedFriend');
+  const username = localStorage.getItem('username');
+  console.log(username);
 
-      try {
-        if (this.isFriend) {
-          await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
-          console.log('Amistad eliminada exitosamente');
-          this.isFriend=false
-        } else {
-          const friendshipData = {
-            username: username,
-            username_friend: selectedFriend,
-          };
+  try {
+    if (this.isFriend) {
+      await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
+      console.log('Amistad eliminada exitosamente');
+    } else {
+      const friendshipData = {
+        username,
+        username_friend: selectedFriend,
+      };
 
-          await axios.post('http://localhost/api/v1/friendships', friendshipData);
-          console.log('Amistad creada exitosamente');
-          this.isFriend=true
-        }
-      } catch (error) {
-        console.error('Error al manejar la amistad:', error.response.data);
-      }
-    },
+      await axios.post('http://localhost/api/v1/friendships', friendshipData);
+      console.log('Amistad creada exitosamente');
+    }
+    
+    this.isFriend = !this.isFriend;
+  } catch (error) {
+    console.error('Error al manejar la amistad:', error.response.data);
+  }
+},
+
 
     async getUserInfo(username) {
       try {
