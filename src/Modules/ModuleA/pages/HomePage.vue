@@ -41,7 +41,7 @@
 
 <style>
 .Comentarios {
-  min-height: 48.5rem;
+  min-height: 50rem;
   margin-left: 9.4375rem;
   margin-top: 3rem;
 }
@@ -110,24 +110,24 @@
   }
 
   .Mensaje {
-    max-width: 15rem;
+    max-width: 19rem;
     margin-left: 0;
   }
     .user-icon{
-        max-width: 2rem;
-        max-height: 2rem;
+        max-width: 3rem;
+        max-height: 3rem;
 }
   .username {
     margin-left: 2rem;
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 
   .date {
     margin-left: 2rem;
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
   .post-content{
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 }
 </style>

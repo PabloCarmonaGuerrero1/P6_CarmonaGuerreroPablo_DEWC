@@ -13,10 +13,20 @@
     padding: 1rem;
     display: flex;
     align-items: center;
+
 }
 .Footer img{
     max-width: 3rem;
     max-height: 3rem;
     margin-right: 1rem; 
+}
+@media (max-width:768px){
+    .Footer{
+        padding: 0.5rem;
+    }
+    .Footer img{
+        max-width: 3rem;
+        max-height: 3rem;
+    }
 }
 </style>

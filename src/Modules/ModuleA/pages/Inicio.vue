@@ -33,7 +33,7 @@
 
 @media screen and (max-width: 768px) {
     .Inicio {
-        height: auto;  
+        height: 40rem;  
         margin-top: 6rem;
         margin-bottom: 4rem;
         text-align: center;

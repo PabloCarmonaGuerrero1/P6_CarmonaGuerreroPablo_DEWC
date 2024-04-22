@@ -146,8 +146,8 @@ export default {
     <!-- Selector para elegir entre revisión y consejo -->
     <label>
       <select v-model="selected" @change="handleSelectChange">
-        <option value="review">Review</option>
-        <option value="advice">Advice</option>
+        <option value="review" classname="option">Review</option>
+        <option value="advice" classname="option">Advice</option>
       </select>
     </label>
     <!-- Sección específica para revisión -->
@@ -198,8 +198,9 @@ export default {
 <style>
 /* Estilo para los mensajes de error en color rojo y tamaño de fuente pequeño */
 .Contact .error {
+  margin-top: 1rem;
   color: red;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .Contact {
   margin-top: 5rem;
@@ -258,5 +259,32 @@ export default {
   color: black;
   font-family: 'Nanum Brush Script', cursive;
   font-size: 3rem;
+}
+@media (max-width:768px){
+  .Contact{
+    min-height: 40rem;
+  }
+  .Contact input{
+  width: 15rem;
+  border-radius: 2.8125rem;
+  font-size: 1rem;
+}
+.Contact textarea{
+  width: 15rem;
+  height: 3rem;
+  font-size: 1rem;
+}
+.Contact select{
+  width: 18rem;
+  height: 3rem;
+  font-size: 2rem;
+}
+.Contact p{
+  font-size: 3rem;
+}
+}
+.Contact button{
+  width: 6rem;
+  font-size: 2rem;
 }
 </style>
