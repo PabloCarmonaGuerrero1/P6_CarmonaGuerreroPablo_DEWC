@@ -121,7 +121,7 @@ export default {
   }
 
   .profile-box {
-    min-width: 20.625rem;
+    width: 20.625rem;
     height: 34rem; 
     text-align: center;
     padding: 2rem;
@@ -201,7 +201,7 @@ export default {
   max-height: 38.6875rem;
 }
 .friends-box{
-  min-width: 20.625rem;
+  width: 20.625rem;
   height: 34rem;
   padding: 2rem;
   border-radius: 1.875rem;
@@ -223,15 +223,113 @@ export default {
   color: inherit;
 }
   @media only screen and (max-width: 600px) {
+    .user-profile {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 77.4vh;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
 
-    .profile-box {
-      width: 5rem; 
-    }
-    .username{
-      font-size: 1rem;
-    }
-    .comments{
-      font-size: 0.5rem;
-    }
+  .profile-box {
+    width: 5rem;
+    height: 5rem; 
+    text-align: center;
+    padding: 2rem;
+    border-radius: 1.875rem;
+  }  
+  .profile-box img {
+    width: 5rem; 
+    height: auto; 
+    border-radius: 50%;
+  }
+  .user-info {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .user-info .username {
+    font-size: 1.5rem;
+
+  }
+
+  .user-info .comments {
+    font-size: 1rem;
+  }
+
+  .user-comments .comment-user{
+    max-width: 5rem;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    border-radius: 1.875rem;
+    display: flex;
+    background-color: #2E3244;
+    color: white;
+    font-family: 'Mogra', sans-serif;
+    font-size: 1rem;
+}
+.user-comments .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-comments .user-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+.user-comments .content-container {
+    flex-grow: 1;
+}
+.user-comments .post-header {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.user-comments .username {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    margin-left: 6rem;
+    font-size: 1.25rem;
+}
+.user-comments .date{
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    margin-left: 3rem;
+    font-size: 1.25rem;
+}
+.user-comments .post-content span {
+    color: #0BFF00;
+}
+.user-comments .post-content{
+    margin-left: 1rem;
+    margin-top: 0;
+}
+.user-friends{
+  max-height: 38.6875rem;
+}
+.friends-box{
+  width: 10rem;
+  height: 10rem;
+  padding: 2rem;
+  border-radius: 1.875rem;
+  background-color: #2E3244;
+  color: white;
+  font-family: 'Mogra', sans-serif;
+}
+.friends-box .friend-title{
+  text-align: center;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+.friends-box .friend-list{
+  margin-left: 1rem;
+  font-size: 1.25rem;
+}
+.friend-list a{
+  text-decoration: none;
+  color: inherit;
+}
   }
 </style>

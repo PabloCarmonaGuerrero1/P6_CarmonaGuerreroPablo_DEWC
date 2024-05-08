@@ -1,42 +1,82 @@
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      commentInfo: [],
+      currentPage: 1,
+      commentsPerPage: 5 
+    };
+  },
+  mounted() {
+    this.getComments();
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.commentInfo.length / this.commentsPerPage);
+    },
+    paginatedComments() {
+      const startIndex = (this.currentPage - 1) * this.commentsPerPage;
+      const endIndex = startIndex + this.commentsPerPage;
+      return this.commentInfo.slice(startIndex, endIndex);
+    }
+  },
+  methods: {
+    async getComments() {
+  try {
+    const apiUrl = `http://localhost/api/v1/comments`;
+    const response = await axios.get(apiUrl);
+    this.commentInfo = response.data;
+    this.commentInfo.sort((a, b) => {
+      if (a.created_at > b.created_at) return -1;
+      if (a.created_at < b.created_at) return 1;
+
+      return a.id - b.id;
+    });
+
+    console.log(this.commentInfo);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+  }
+}
+,
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+  }
+}
+</script>
+
 <template>
-    <div class="Comentarios">
-    <article class="Mensaje">
-        <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-        </div>
-        <div class="content-container">
-            <header class="post-header">
-                <p class="username">Jun</p>
-                <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-        </div>
+  <div class="Comentarios">
+    <article v-for="comment in paginatedComments" :key="comment.id" class="Mensaje">
+      <div class="image-container">
+        <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
+      </div>
+      <div class="content-container">
+        <header class="post-header">
+          <p class="username">{{ comment.username }}</p>
+          <p class="date">{{ formatDate(comment.created_at) }}</p>
+        </header>
+        <p class="post-content">{{ comment.texto }}</p>
+      </div>
     </article>
-    <article class="Mensaje">
-        <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-        </div>
-        <div class="content-container">
-            <header class="post-header">
-                <p class="username">Jun</p>
-                <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-        </div>
-    </article>
-    <article class="Mensaje">
-        <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-        </div>
-        <div class="content-container">
-            <header class="post-header">
-                <p class="username">Jun</p>
-                <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-        </div>
-    </article>
-</div>
+    <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+    <span>{{ currentPage }}</span>
+    <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+  </div>
 </template>
 
 <style>
