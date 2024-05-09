@@ -14,6 +14,7 @@ export default {
   },
   mounted() {
     this.getComments();
+    this.getUserInfo();
   },
   computed: {
     totalPages() {
@@ -89,7 +90,6 @@ export default {
         const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
         const response = await axios.get(apiUrl);
         this.userInfo = response.data;
-        console.log(this.userInfo.username)
       } catch (error) {
         console.error('Error fetching user information:', error);
       }
