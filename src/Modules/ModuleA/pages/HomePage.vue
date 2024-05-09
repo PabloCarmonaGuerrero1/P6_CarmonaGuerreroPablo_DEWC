@@ -61,7 +61,7 @@ export default {
     toggleModal(){
       this.isModalOpen=!this.isModalOpen
     },
-    submit(){
+    async submit(){
       try {
         const apiUrl = 'http://localhost:80/api/v1/comments';
         const userData = {
