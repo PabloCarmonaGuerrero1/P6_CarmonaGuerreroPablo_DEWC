@@ -6,7 +6,8 @@ export default {
     return {
       commentInfo: [],
       currentPage: 1,
-      commentsPerPage: 5 
+      commentsPerPage: 5,
+      isModalOpen: false
     };
   },
   mounted() {
@@ -54,6 +55,9 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
+    },
+    toggleModal(){
+      this.isModalOpen=!this.isModalOpen
     }
   }
 }
@@ -76,7 +80,13 @@ export default {
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
     <span>{{ currentPage }}</span>
     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-    <button><img src="@/assets/icons/pluma.png" alt=""></button>
+    <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt=""></button>
+    <Teleport to="body">
+      <div class="modal" v-if="isModalOpen">
+        <p>H</p>
+        <button @click="toggleModal">Close</button>
+    </div>
+    </Teleport>
   </div>
 </template>
 
@@ -143,8 +153,23 @@ export default {
   margin-left: 1rem;
   margin-top: 0;
 }
-
-
+.modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #2E3244;
+  width: 50%;
+  height: 50%;
+  transform: translate(50%, 50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal>div{
+  background-color: aliceblue;
+  padding: 50px;
+  border-radius: 10px;
+}
 @media (max-width: 768px) {
   .Comentarios {
     margin-left: 2rem;
