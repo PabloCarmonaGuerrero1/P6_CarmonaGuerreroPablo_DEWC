@@ -7,7 +7,9 @@ export default {
       commentInfo: [],
       currentPage: 1,
       commentsPerPage: 5,
-      isModalOpen: false
+      isModalOpen: false,
+      comment:"",
+      userInfo : [],
     };
   },
   mounted() {
@@ -58,7 +60,39 @@ export default {
     },
     toggleModal(){
       this.isModalOpen=!this.isModalOpen
-    }
+    },
+    submit(){
+      try {
+        const apiUrl = 'http://localhost:80/api/v1/comments';
+        const userData = {
+          username: this.userInfo.username,
+          texto: this.comment,
+        };
+
+        const response = await axios.post(apiUrl, userData);
+        console.log('Respuesta del servidor:', response.data);
+        this.getComments()
+      } catch (error) {
+        if (error.response) {
+          console.error('Server responded with an error status:', error.response.status);
+          console.error('Error data:', error.response.data);
+        } else if (error.request) {
+          console.error('No response received from the server');
+        } else {
+          console.error('Error setting up the request:', error.message);
+        }
+      }
+    },
+    async getUserInfo() {
+      try {
+        const storedUsername = localStorage.getItem('username');
+        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
+        const response = await axios.get(apiUrl);
+        this.userInfo = response.data;
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+      }
+    },
   }
 }
 </script>
@@ -85,9 +119,10 @@ export default {
       <div class="modal" v-if="isModalOpen">
         <form>
           <label>
-            <textarea placeholder="Use me to comment!"></textarea>
+            <textarea v-model="comment" placeholder="Use me to comment!"></textarea>
           </label>
         </form>
+        <button @click.prevent="submit">Send</button>
         <button @click="toggleModal">Close</button>
     </div>
     </Teleport>
