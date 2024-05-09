@@ -76,6 +76,7 @@ export default {
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
     <span>{{ currentPage }}</span>
     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    <button><img src="@/assets/icons/pluma.png" alt=""></button>
   </div>
 </template>
 
