@@ -83,7 +83,11 @@ export default {
     <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt=""></button>
     <Teleport to="body">
       <div class="modal" v-if="isModalOpen">
-        <p>H</p>
+        <form>
+          <label>
+            <textarea placeholder="Use me to comment!"></textarea>
+          </label>
+        </form>
         <button @click="toggleModal">Close</button>
     </div>
     </Teleport>
@@ -164,11 +168,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 5rem;
 }
 .modal>div{
   background-color: aliceblue;
   padding: 50px;
-  border-radius: 10px;
 }
 @media (max-width: 768px) {
   .Comentarios {
