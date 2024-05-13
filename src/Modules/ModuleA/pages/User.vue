@@ -7,11 +7,25 @@ export default {
       userInfo: {},
       userFriends: [],
       userAvatar: '@/assets/icons/perfil.png', // Aquí se verá una imagen de perfil a elección del usuario en futuras entregas
+      commentInfo: [],
+      currentPage: 1,
+      commentsPerPage: 5,
     };
   },
   mounted() {
     this.getUserInfo();
     this.getUserFriends();
+    this.getComments();
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.commentInfo.length / this.commentsPerPage);
+    },
+    paginatedComments() {
+      const startIndex = (this.currentPage - 1) * this.commentsPerPage;
+      const endIndex = startIndex + this.commentsPerPage;
+      return this.commentInfo.slice(startIndex, endIndex);
+    }
   },
   methods: {
     async getUserInfo() {
@@ -42,6 +56,37 @@ export default {
       localStorage.setItem('selectedFriend', usernameFriend);
       this.$router.push('/other-user');
     },
+    async getComments() {
+  try {
+    const storedUsername = localStorage.getItem('username');
+    const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
+    const response = await axios.get(apiUrl);
+    this.commentInfo = response.data;
+    this.commentInfo.sort((a, b) => {
+      if (a.created_at > b.created_at) return -1;
+      if (a.created_at < b.created_at) return 1;
+
+      return a.id - b.id;
+    });
+
+    console.log(this.commentInfo);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+  }
+},formatDate(dateString) {
+      const date = new Date(dateString);
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
   },
 };
 </script>
@@ -51,49 +96,28 @@ export default {
       <div class="profile-box">
         <img src="@/assets/icons/perfil.png" alt="User Avatar">
         <div class="user-info">
-          <p class="username">{{ userInfo.username }}</p>
-          <p class="comments">Comments</p>
-          <p class="comments">{{ userInfo.num_comments }}</p>
+          <p class="username_user">{{ userInfo.username }}</p>
+          <p class="comments_user">Comments</p>
+          <p class="comments_user">{{ userInfo.num_comments }}</p>
           <button @click="logout">Logout</button>
         </div>
       </div>
       <div class="user-comments">
-        <article class="comment-user">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-          </div>
-        </article>
-        <article class="comment-user">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-          </div>
-        </article>
-        <article class="comment-user">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-          </div>
-        </article>
+        <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
+      <div class="image-container">
+        <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
+      </div>
+      <div class="content-container">
+        <header class="post-header">
+          <p class="username">{{ comment.username }}</p>
+          <p class="date">{{ formatDate(comment.created_at) }}</p>
+        </header>
+        <p class="post-content">{{ comment.texto }}</p>
+      </div>
+    </article>
+    <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+    <span>{{ currentPage }}</span>
+    <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
       <div class="user-friends">
         <div class="friends-box">
@@ -140,12 +164,12 @@ export default {
     text-align: center;
   }
 
-  .user-info .username {
+  .user-info .username_user {
     font-size: 1.5rem;
 
   }
 
-  .user-info .comments {
+  .user-info .comments_user {
     font-size: 1rem;
   }
 
