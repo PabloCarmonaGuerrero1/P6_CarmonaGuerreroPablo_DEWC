@@ -43,56 +43,69 @@ export default {
   } catch (error) {
     console.error('Error fetching comments:', error);
   }
-}
-,
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
-    },
-    previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    },
-    toggleModal(){
-      this.isModalOpen=!this.isModalOpen
-    },
-    async submit(){
-      try {
-        const apiUrl = 'http://localhost:80/api/v1/comments';
-        const userData = {
-          username: this.userInfo.username,
-          texto: this.comment,
-        };
-
-        const response = await axios.post(apiUrl, userData);
-        console.log('Respuesta del servidor:', response.data);
+},
+  formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  },
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  },
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  },
+  toggleModal(){
+    this.isModalOpen=!this.isModalOpen
+  },
+  async submit(){
+    try {
+      const apiUrl = 'http://localhost:80/api/v1/comments';
+      const userData = {
+        username: this.userInfo.username,
+        texto: this.comment,
+      };
+      const response = await axios.post(apiUrl, userData);
+      console.log('Respuesta del servidor:', response.data);
         this.getComments()
       } catch (error) {
-        if (error.response) {
-          console.error('Server responded with an error status:', error.response.status);
-          console.error('Error data:', error.response.data);
+          if (error.response) {
+            console.error('Server responded with an error status:', error.response.status);
+            console.error('Error data:', error.response.data);
         } else if (error.request) {
-          console.error('No response received from the server');
+            console.error('No response received from the server');
         } else {
-          console.error('Error setting up the request:', error.message);
+            console.error('Error setting up the request:', error.message);
         }
       }
-    },
-    async getUserInfo() {
-      try {
-        const storedUsername = localStorage.getItem('username');
-        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
-        const response = await axios.get(apiUrl);
-        this.userInfo = response.data;
-      } catch (error) {
+  },
+  async getUserInfo() {
+    try {
+      const storedUsername = localStorage.getItem('username');
+      const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
+      const response = await axios.get(apiUrl);
+      this.userInfo = response.data;
+    } catch (error) {
         console.error('Error fetching user information:', error);
-      }
+    }
+  },
+  formatComment(comment) {
+    const words = comment.split(' ');
+    const formattedWords = words.map(word => {
+    if (word.startsWith('#')) {
+      return `<span class="hashtag">${word}</span>`;
+    } else {
+        return word;
+    }
+  });
+  return formattedWords.join(' ');
+},
+saveFriendAndNavigate(usernameFriend) {
+      localStorage.setItem('selectedFriend', usernameFriend);
+      this.$router.push('/other-user');
     },
   }
 }
@@ -106,10 +119,10 @@ export default {
       </div>
       <div class="content-container">
         <header class="post-header">
-          <p class="username">{{ comment.username }}</p>
+          <router-link @click="saveFriendAndNavigate(comment.username)" to="/other-user" class="username">{{ comment.username }}</router-link>
           <p class="date">{{ formatDate(comment.created_at) }}</p>
         </header>
-        <p class="post-content">{{ comment.texto }}</p>
+        <p class="post-content" v-html="formatComment(comment.texto)"></p>
       </div>
     </article>
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
@@ -210,6 +223,10 @@ export default {
   background-color: aliceblue;
   padding: 50px;
 }
+.hashtag {
+  color: #00ff00; 
+}
+
 @media (max-width: 768px) {
   .Comentarios {
     margin-left: 2rem;
@@ -219,9 +236,9 @@ export default {
     max-width: 19rem;
     margin-left: 0;
   }
-    .user-icon{
-        max-width: 3rem;
-        max-height: 3rem;
+  .user-icon{
+    max-width: 3rem;
+    max-height: 3rem;
 }
   .username {
     margin-left: 2rem;

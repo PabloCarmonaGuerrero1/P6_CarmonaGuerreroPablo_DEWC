@@ -9,7 +9,8 @@ export default {
       userAvatar: '@/assets/icons/perfil.png', // Aquí se verá una imagen de perfil a elección del usuario en futuras entregas
       commentInfo: [],
       currentPage: 1,
-      commentsPerPage: 5,
+      commentsPerPage: 4,
+      num_comments : 0,
     };
   },
   mounted() {
@@ -62,6 +63,7 @@ export default {
     const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
     const response = await axios.get(apiUrl);
     this.commentInfo = response.data;
+    this.num_comments = this.commentInfo.length;
     this.commentInfo.sort((a, b) => {
       if (a.created_at > b.created_at) return -1;
       if (a.created_at < b.created_at) return 1;
@@ -98,7 +100,7 @@ export default {
         <div class="user-info">
           <p class="username_user">{{ userInfo.username }}</p>
           <p class="comments_user">Comments</p>
-          <p class="comments_user">{{ userInfo.num_comments }}</p>
+          <p class="comments_user">{{ this.num_comments }}</p>
           <button @click="logout">Logout</button>
         </div>
       </div>
