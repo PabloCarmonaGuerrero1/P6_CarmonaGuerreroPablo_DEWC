@@ -6,59 +6,64 @@ export default {
     return {
       otherUserInfo: {},
       isFriend: false,
+      commentInfo: [],
+      currentPage: 1,
+      commentsPerPage: 4,
+      num_comments: 0,
     };
   },
-  beforeMount() {
+  mounted() {
     this.loadUserData();
   },
-  mounted() {
-  const username = localStorage.getItem('username')
-  if (username) {
-    this.loadUserData()
-  }
-},
+  computed: {
+    totalPages() {
+      return Math.ceil(this.commentInfo.length / this.commentsPerPage);
+    },
+    paginatedComments() {
+      const startIndex = (this.currentPage - 1) * this.commentsPerPage;
+      const endIndex = startIndex + this.commentsPerPage;
+      return this.commentInfo.slice(startIndex, endIndex);
+    }
+  },
   methods: {
     async loadUserData() {
-  const username = localStorage.getItem('username')
-  const selectedFriend = localStorage.getItem('selectedFriend')
+  const username = localStorage.getItem('username');
+  const selectedFriend = localStorage.getItem('selectedFriend');
 
   try {
-    if (localStorage.getItem('isFriend') === 'true') {
-      this.isFriend = true
-    } else {
-      const isFriendFromLocalStorage = await this.checkFriendshipStatus(username, selectedFriend)
-      this.isFriend = isFriendFromLocalStorage
-    }
-    await this.getUserInfo(selectedFriend)
+    console.log('Loading user data...');
+    const isFriendFromAPI = await this.checkFriendshipStatus(username, selectedFriend);
+    console.log('isFriendFromAPI:', isFriendFromAPI);
+    await this.getUserInfo(selectedFriend);
+    await this.getComments(selectedFriend);
+    console.log('Updating isFriend...');
+    this.isFriend = isFriendFromAPI;
   } catch (error) {
-    console.error('Error loading user data:', error)
+    console.error('Error loading user data:', error);
   }
 },
-async toggleFriendship() {
-  const selectedFriend = localStorage.getItem('selectedFriend')
-  const username = localStorage.getItem('username')
 
-  try {
-    if (this.isFriend) {
-      await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`)
-      localStorage.setItem('isFriend', 'false')
-      console.log('Amistad eliminada exitosamente')
-    } else {
-      const friendshipData = {
-        username: username,
-        username_friend: selectedFriend,
+    async toggleFriendship() {
+      const selectedFriend = localStorage.getItem('selectedFriend');
+      const username = localStorage.getItem('username');
+
+      try {
+        if (this.isFriend) {
+          await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
+          console.log('Amistad eliminada exitosamente');
+        } else {
+          const friendshipData = {
+            username: username,
+            username_friend: selectedFriend,
+          };
+          await axios.post('http://localhost/api/v1/friendships', friendshipData);
+          console.log('Amistad creada exitosamente');
+        }
+        this.isFriend = !this.isFriend;
+      } catch (error) {
+        console.error('Error al manejar la amistad:', error.response.data);
       }
-
-      await axios.post('http://localhost/api/v1/friendships', friendshipData)
-      localStorage.setItem('isFriend', 'true')
-      console.log('Amistad creada exitosamente')
-    }
-    this.isFriend = !this.isFriend
-  } catch (error) {
-    console.error('Error al manejar la amistad:', error.response.data)
-  }
-},
-
+    },
     async getUserInfo(username) {
       try {
         const apiUrl = `http://localhost/api/v1/users/${username}`;
@@ -68,16 +73,15 @@ async toggleFriendship() {
         console.error('Error fetching other user information:', error);
       }
     },
-    async getComments() {
+    async getComments(selectedFriend) {
       try {
-        const storedUsername = localStorage.getItem('selectedFriend');
-        const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
+        const apiUrl = `http://localhost/api/v1/comments/${selectedFriend}`;
         const response = await axios.get(apiUrl);
         this.commentInfo = response.data;
         this.num_comments = this.commentInfo.length;
         this.commentInfo.sort((a, b) => {
-        if (a.created_at > b.created_at) return -1;
-        if (a.created_at < b.created_at) return 1;
+          if (a.created_at > b.created_at) return -1;
+          if (a.created_at < b.created_at) return 1;
           return a.id - b.id;
         });
       } catch (error) {
@@ -88,6 +92,17 @@ async toggleFriendship() {
       const date = new Date(dateString);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
+    async checkFriendshipStatus(username, selectedFriend) {
+  try {
+    console.log('Checking friendship status...');
+    const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
+    console.log('Friendship status response:', response.data);
+    return true;
+  } catch (error) {
+    console.error('Error checking friendship status:', error);
+    return false;
+  }
+},
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
@@ -98,17 +113,6 @@ async toggleFriendship() {
         this.currentPage--;
       }
     },
-    async checkFriendshipStatus(username, selectedFriend) {
-  let isFriend = false
-  try {
-    const response = await axios.get(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`)
-    isFriend = response.data.length > 0
-    localStorage.setItem('isFriend', isFriend ? 'true' : 'false')
-  } catch (error) {
-    console.error('Error checking friendship status:', error)
-  }
-  return isFriend
-},
   },
 };
 </script>
@@ -120,30 +124,29 @@ async toggleFriendship() {
       <img src="@/assets/icons/perfil.png" alt="User Avatar">
       <div class="other-info">
         <p class="username">{{ otherUserInfo.username }}</p>
-        <p class="comments">Comments: {{ otherUserInfo.num_comments }}</p>
+        <p class="comments">Comments: {{ num_comments }}</p>
         <button @click="toggleFriendship">
           {{ isFriend ? 'Dejar de ser Amigo' : 'Añadir Amistad' }}
         </button>
-            </div>
-        </div>
-        <div class="other-comments">
-          <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">{{ comment.username }}</p>
-              <p class="date">{{ formatDate(comment.created_at) }}</p>
-            </header>
-            <p class="post-content">{{ comment.texto }}</p>
-          </div>
-        </article>
-        <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-        <span>{{ currentPage }}</span>
-        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-        </div>
+      </div>
     </div>
+    <div class="other-comments">
+      <article v-for="comment in paginatedComments" :key="comment.id" class="Mensaje">
+        <div class="image-container">
+          <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
+        </div>
+        <div class="content-container">
+          <header class="post-header">
+            <p class="username">{{ comment.username }}</p>
+            <p class="date">{{ formatDate(comment.created_at) }}</p>
+          </header>
+          <p class="post-content">{{ comment.texto }}</p>
+        </div>
+      </article>
+      <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    </div>
+  </div>
 </template>
 
 <style>
