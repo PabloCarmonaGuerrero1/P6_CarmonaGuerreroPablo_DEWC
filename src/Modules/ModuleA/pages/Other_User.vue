@@ -68,7 +68,36 @@ async toggleFriendship() {
         console.error('Error fetching other user information:', error);
       }
     },
-
+    async getComments() {
+      try {
+        const storedUsername = localStorage.getItem('selectedFriend');
+        const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
+        const response = await axios.get(apiUrl);
+        this.commentInfo = response.data;
+        this.num_comments = this.commentInfo.length;
+        this.commentInfo.sort((a, b) => {
+        if (a.created_at > b.created_at) return -1;
+        if (a.created_at < b.created_at) return 1;
+          return a.id - b.id;
+        });
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
     async checkFriendshipStatus(username, selectedFriend) {
   let isFriend = false
   try {
@@ -98,42 +127,21 @@ async toggleFriendship() {
             </div>
         </div>
         <div class="other-comments">
-            <article class="Mensaje">
+          <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
           <div class="image-container">
             <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
           </div>
           <div class="content-container">
             <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
+              <p class="username">{{ comment.username }}</p>
+              <p class="date">{{ formatDate(comment.created_at) }}</p>
             </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
+            <p class="post-content">{{ comment.texto }}</p>
           </div>
         </article>
-        <article class="Mensaje">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-          </div>
-        </article>
-        <article class="Mensaje">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-          </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">Jun</p>
-              <p class="date">12/11/2023</p>
-            </header>
-            <p class="post-content">Wow! The last episode was amazing, nice <span>#NewEpisode</span>.</p>
-          </div>
-        </article>    
+        <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+        <span>{{ currentPage }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
         </div>
     </div>
 </template>

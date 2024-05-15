@@ -58,24 +58,22 @@ export default {
       this.$router.push('/other-user');
     },
     async getComments() {
-  try {
-    const storedUsername = localStorage.getItem('username');
-    const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
-    const response = await axios.get(apiUrl);
-    this.commentInfo = response.data;
-    this.num_comments = this.commentInfo.length;
-    this.commentInfo.sort((a, b) => {
-      if (a.created_at > b.created_at) return -1;
-      if (a.created_at < b.created_at) return 1;
-
-      return a.id - b.id;
-    });
-
-    console.log(this.commentInfo);
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-  }
-},formatDate(dateString) {
+      try {
+        const storedUsername = localStorage.getItem('username');
+        const apiUrl = `http://localhost/api/v1/comments/${storedUsername}`;
+        const response = await axios.get(apiUrl);
+        this.commentInfo = response.data;
+        this.num_comments = this.commentInfo.length;
+        this.commentInfo.sort((a, b) => {
+        if (a.created_at > b.created_at) return -1;
+        if (a.created_at < b.created_at) return 1;
+          return a.id - b.id;
+        });
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    },
+    formatDate(dateString) {
       const date = new Date(dateString);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
@@ -106,20 +104,20 @@ export default {
       </div>
       <div class="user-comments">
         <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
-      <div class="image-container">
-        <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
-      </div>
-      <div class="content-container">
-        <header class="post-header">
-          <p class="username">{{ comment.username }}</p>
-          <p class="date">{{ formatDate(comment.created_at) }}</p>
-        </header>
-        <p class="post-content">{{ comment.texto }}</p>
-      </div>
-    </article>
-    <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-    <span>{{ currentPage }}</span>
-    <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+          <div class="image-container">
+            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
+          </div>
+          <div class="content-container">
+            <header class="post-header">
+              <p class="username">{{ comment.username }}</p>
+              <p class="date">{{ formatDate(comment.created_at) }}</p>
+            </header>
+            <p class="post-content">{{ comment.texto }}</p>
+          </div>
+        </article>
+        <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
+        <span>{{ currentPage }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
       <div class="user-friends">
         <div class="friends-box">
