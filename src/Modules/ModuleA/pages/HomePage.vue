@@ -104,7 +104,7 @@ export default {
       if (!this.filters.includes(word)) {
         this.filters.push(word);
       }
-      return `<span class="hashtag" @click="sortByWord('${word}')">${word}</span>`;
+      return `<span class="hashtag">${word}</span>`;
     } else {
       return word;
     }

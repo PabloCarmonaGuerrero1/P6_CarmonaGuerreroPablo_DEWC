@@ -87,6 +87,18 @@ export default {
         this.currentPage--;
       }
     },
+    formatComment(comment) {
+      const words = comment.split(' ');
+      const formattedWords = words.map(word => {
+      if (word.startsWith('#')) {
+        return `<span class="hashtag">${word}</span>`;
+      } else {
+        return word;
+      }
+      }
+    );
+      return formattedWords.join(' ');
+    },
   },
 };
 </script>
@@ -112,7 +124,7 @@ export default {
               <p class="username">{{ comment.username }}</p>
               <p class="date">{{ formatDate(comment.created_at) }}</p>
             </header>
-            <p class="post-content">{{ comment.texto }}</p>
+            <p class="post-content" v-html="formatComment(comment.texto)"></p>
           </div>
         </article>
         <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
