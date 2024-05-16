@@ -50,6 +50,7 @@ export default {
       try {
         if (this.isFriend) {
           await axios.delete(`http://localhost/api/v1/friendships/${username}/${selectedFriend}`);
+          await axios.delete(`http://localhost/api/v1/friendships/${selectedFriend}/${username}`);
           console.log('Amistad eliminada exitosamente');
         } else {
           const friendshipData = {
@@ -57,6 +58,11 @@ export default {
             username_friend: selectedFriend,
           };
           await axios.post('http://localhost/api/v1/friendships', friendshipData);
+          const friendshipData2 = {
+            username: selectedFriend,
+            username_friend: username,
+          };
+          await axios.post('http://localhost/api/v1/friendships', friendshipData2);
           console.log('Amistad creada exitosamente');
         }
         this.isFriend = !this.isFriend;

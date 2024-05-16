@@ -11,7 +11,7 @@ export default {
       comment:"",
       userInfo : [],
       filters:[],
-      x:"#prueba",
+      x:"#anda",
     };
   },
   mounted() {
@@ -39,6 +39,9 @@ export default {
       if (a.created_at < b.created_at) return 1;
 
       return a.id - b.id;
+    });
+    this.commentInfo.forEach(comment => {
+      this.formatComment(comment.texto);
     });
 
     console.log(this.commentInfo);
@@ -101,21 +104,23 @@ export default {
       if (!this.filters.includes(word)) {
         this.filters.push(word);
       }
-      return `<span class="hashtag">${word}</span>`;
+      return `<span class="hashtag" @click="sortByWord('${word}')">${word}</span>`;
     } else {
-        return word;
+      return word;
     }
-  });
+  }
+);
   return formattedWords.join(' ');
 },
-saveFriendAndNavigate(usernameFriend) {
-      localStorage.setItem('selectedFriend', usernameFriend);
-      this.$router.push('/other-user');
-    },
-    sortByWord(word) {
-      this.commentInfo.sort((a, b) => {
-        if (a.texto.includes(word) && !b.texto.includes(word)) return -1;
-        if (!a.texto.includes(word) && b.texto.includes(word)) return 1;
+  saveFriendAndNavigate(usernameFriend) {
+    localStorage.setItem('selectedFriend', usernameFriend);
+    this.$router.push('/other-user');
+  },
+  sortByWord(word) {
+    this.commentInfo = [...this.commentInfo].sort((a, b) => b.id - a.id);
+    this.commentInfo.sort((a, b) => {
+      if (a.texto.includes(word) && !b.texto.includes(word)) return -1;
+      if (!a.texto.includes(word) && b.texto.includes(word)) return 1;
         return 0;
       });
     },
@@ -139,7 +144,7 @@ saveFriendAndNavigate(usernameFriend) {
     </article>
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-    <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt=""></button>
+    <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
     <Teleport to="body">
       <div class="modal" v-if="isModalOpen">
         <form>
@@ -151,8 +156,12 @@ saveFriendAndNavigate(usernameFriend) {
         <button @click="toggleModal">Close</button>
     </div>
     </Teleport>
-    <div>
-      <button @click="sortByWord(this.x)">X</button>
+    <div class="friend-list">
+        <ul>
+          <li v-for="word in filters" :key="word">
+            <p @click="sortByWord(word)" style="color: aliceblue;">{{ word }}</p>
+          </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -203,6 +212,8 @@ saveFriendAndNavigate(usernameFriend) {
   margin-bottom: 0rem;
   margin-left: 6rem;
   font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
 }
 
 .date {
