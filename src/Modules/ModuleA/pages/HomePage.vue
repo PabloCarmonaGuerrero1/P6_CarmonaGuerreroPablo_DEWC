@@ -10,6 +10,8 @@ export default {
       isModalOpen: false,
       comment:"",
       userInfo : [],
+      filters:[],
+      x:"#prueba",
     };
   },
   mounted() {
@@ -96,6 +98,9 @@ export default {
     const words = comment.split(' ');
     const formattedWords = words.map(word => {
     if (word.startsWith('#')) {
+      if (!this.filters.includes(word)) {
+        this.filters.push(word);
+      }
       return `<span class="hashtag">${word}</span>`;
     } else {
         return word;
@@ -106,6 +111,13 @@ export default {
 saveFriendAndNavigate(usernameFriend) {
       localStorage.setItem('selectedFriend', usernameFriend);
       this.$router.push('/other-user');
+    },
+    sortByWord(word) {
+      this.commentInfo.sort((a, b) => {
+        if (a.texto.includes(word) && !b.texto.includes(word)) return -1;
+        if (!a.texto.includes(word) && b.texto.includes(word)) return 1;
+        return 0;
+      });
     },
   }
 }
@@ -126,7 +138,6 @@ saveFriendAndNavigate(usernameFriend) {
       </div>
     </article>
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-    <span>{{ currentPage }}</span>
     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
     <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt=""></button>
     <Teleport to="body">
@@ -140,6 +151,9 @@ saveFriendAndNavigate(usernameFriend) {
         <button @click="toggleModal">Close</button>
     </div>
     </Teleport>
+    <div>
+      <button @click="sortByWord(this.x)">X</button>
+    </div>
   </div>
 </template>
 
