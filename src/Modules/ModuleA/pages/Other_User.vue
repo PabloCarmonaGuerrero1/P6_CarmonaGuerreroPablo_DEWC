@@ -4,6 +4,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      username: "",
       otherUserInfo: {},
       isFriend: false,
       commentInfo: [],
@@ -13,6 +14,7 @@ export default {
     };
   },
   mounted() {
+    this.username = localStorage.getItem('username');
     this.loadUserData();
   },
   computed: {
@@ -141,9 +143,9 @@ export default {
     <div class="other-profile-box">
       <img src="@/assets/icons/perfil.png" alt="User Avatar">
       <div class="other-info">
-        <p class="username">{{ otherUserInfo.username }}</p>
-        <p class="comments">Comments: {{ num_comments }}</p>
-        <button @click="toggleFriendship">
+        <p class="username-other">{{ otherUserInfo.username }}</p>
+        <p class="comments-other">Comments: {{ num_comments }}</p>
+        <button v-if="otherUserInfo.username !== username && username" @click="toggleFriendship">
           {{ isFriend ? 'Dejar de ser Amigo' : 'Añadir Amistad' }}
         </button>
       </div>

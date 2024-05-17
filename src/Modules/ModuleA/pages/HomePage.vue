@@ -4,6 +4,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      username: "",
       commentInfo: [],
       currentPage: 1,
       commentsPerPage: 5,
@@ -15,6 +16,7 @@ export default {
     };
   },
   mounted() {
+    this.username = localStorage.getItem('username');
     this.getComments();
     this.getUserInfo();
   },
@@ -144,7 +146,7 @@ export default {
     </article>
     <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
     <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
-    <button @click="toggleModal"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
+    <button v-if="username" @click="toggleModal"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
     <Teleport to="body">
       <div class="modal" v-if="isModalOpen">
         <form>
