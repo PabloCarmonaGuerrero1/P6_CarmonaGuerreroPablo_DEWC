@@ -1,13 +1,18 @@
 <template>
+    <!-- Componente para la página 404 -->
     <div class="NotFound">
+        <!-- Título 404 -->
         <h2>404</h2>
+        <!-- Mensaje de error -->
         <h3>Oops Something Wrong Happens</h3>
+        <!-- Enlace para volver a la página de inicio -->
         <router-link to="/HomePage">
+            <!-- Imagen animada -->
             <img src="@/assets/icons/giphy.gif" alt="rick-portal">
         </router-link>
     </div>
-
 </template>
+
 <style>
 .NotFound{
     height: 75vh;

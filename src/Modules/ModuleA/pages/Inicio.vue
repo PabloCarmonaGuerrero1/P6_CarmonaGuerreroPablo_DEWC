@@ -1,9 +1,14 @@
 <template>
     <div class="Inicio">
+        <!-- Div para la sección de inicio -->
         <h2>Welcome to RickReditt!</h2>
+        <!-- Título principal -->
         <h3>A social network where you can freely interact with other users, expressing your comments on any topic, but mainly focused on discussions related to Rick and Morty</h3>
+        <!-- Descripción de la red social -->
         <router-link to="/HomePage">
+            <!-- Enlace de router para la página de inicio -->
             <img src="@/assets/icons/giphy.gif" alt="rick-portal">
+            <!-- Imagen con enlace, representando el portal de Rick -->
         </router-link>
     </div>
 </template>

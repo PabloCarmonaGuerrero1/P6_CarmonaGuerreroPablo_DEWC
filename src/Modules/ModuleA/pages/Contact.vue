@@ -1,5 +1,7 @@
 <script>
-  //En futuras entregas habrá una validación para asegurar que el usuario de User Advice este registrado en la base de datos.
+// Importar la librería Axios para hacer solicitudes HTTP
+import axios from 'axios';
+
 export default {
   data() {
     // Estado de los datos del formulario y mensajes de error
@@ -10,12 +12,14 @@ export default {
       email: '',
       rating: '',
       date: '',
+      useradvice: '',
       errors: {
         review: '',
         rating: '',
         email: '',
         advice: '',
         date: '',
+        useradvice: '',
       },
       // Indicador de inhabilitar el botón de envío
       isSubmitDisabled: true,
@@ -30,12 +34,14 @@ export default {
       this.email = '';
       this.rating = '';
       this.date = '';
+      this.useradvice = '';
       this.errors = {
         review: '',
         rating: '',
         email: '',
         advice: '',
         date: '',
+        useradvice: '',
       };
       // Actualizar estado del botón de envío
       this.updateSubmitDisabled();
@@ -76,6 +82,22 @@ export default {
       // Actualizar estado del botón de envío
       this.updateSubmitDisabled();
     },
+    // Validación del usuario reportado
+    async validateUser(){
+      try {
+        const user = this.useradvice
+        const apiUrl = `http://localhost/api/v1/users/${user}`; 
+        const response = await axios.get(apiUrl);
+        const userInfo = response.data;
+        if(userInfo){
+          this.errors.useradvice = '';
+        }
+        // Actualizar estado del botón de envío
+        this.updateSubmitDisabled();
+      } catch (error) {
+        this.errors.useradvice = 'This user is not registered ';
+      }
+    },
     // Validación de la longitud del consejo
     validateAdvice() {
       const adviceLength = this.advice.replace(/\s/g, '').length;
@@ -112,22 +134,28 @@ export default {
           this.errors.email === '' &&
           this.errors.rating === ''
         ) {
-          console.log('Form is valid. Submitting...');
+          this.review = '';
+          this.email = '';
+          this.rating = '';
         } else {
           console.log('Form is invalid. Please fix errors.');
         }
       } else {
         // Validar campos específicos de consejo
+        this.validateUser();
         this.validateAdvice();
         this.validateDate(); 
 
         // Comprobar si no hay errores antes de enviar
-        if (this.errors.advice === '' && this.errors.date === '') {
-          console.log('Form is valid. Submitting...');
+        if (this.errors.advice === '' && this.errors.date === '' && this.errors.useradvice === '') {
+          this.advice = '';
+          this.date = '';
+          this.useradvice = '';
         } else {
           console.log('Form is invalid. Please fix errors.');
         }
       }
+      
     },
     // Actualizar el estado del botón de envío
     updateSubmitDisabled() {
@@ -146,57 +174,69 @@ export default {
     <!-- Selector para elegir entre revisión y consejo -->
     <label>
       <select v-model="selected" @change="handleSelectChange">
+        <!-- Opción para revisión -->
         <option value="review" classname="option">Review</option>
+        <!-- Opción para consejo -->
         <option value="advice" classname="option">Advice</option>
       </select>
     </label>
+
     <!-- Sección específica para revisión -->
     <div v-if="selected === 'review'">
       <!-- Campo para ingresar el correo electrónico -->
       <label>
         <p>Email</p>
         <input type="text" v-model="email" @input="validateEmail">
+        <!-- Mensaje de error para el correo electrónico -->
         <div class="error" v-if="errors.email">{{ errors.email }}</div>
       </label>
       <!-- Campo para ingresar la calificación numérica -->
       <label>
         <p>Rating</p>
         <input type="number" v-model="rating" min="1" max="10" @input="validateRating">
+        <!-- Mensaje de error para la calificación -->
         <div class="error" v-if="errors.rating">{{ errors.rating }}</div>
       </label>
       <!-- Campo para ingresar la revisión en formato de texto largo -->
       <label>
         <p>Review</p>
         <textarea v-model="review" @input="validateReview"></textarea>
+        <!-- Mensaje de error para la revisión -->
         <div class="error" v-if="errors.review">{{ errors.review }}</div>
       </label>
     </div>
+
     <!-- Sección específica para consejo -->
     <div v-if="selected === 'advice'">
-      <!-- Campo para ingresar el consejo del usuario en formato de texto corto -->
+      <!-- Campo para ingresar el usuario del consejo -->
       <label>
         <p>User Advice</p>
-        <input type="text">
+        <input type="text" v-model="useradvice" @input="validateUser">
+        <!-- Mensaje de error para el usuario del consejo -->
+        <div class="error" v-if="errors.useradvice">{{ errors.useradvice }}</div>
       </label>
       <!-- Campo para ingresar la fecha del consejo -->
       <label>
         <p>Date</p>
         <input type="date" v-model="date" @input="validateDate">
+        <!-- Mensaje de error para la fecha -->
         <div class="error" v-if="errors.date">{{ errors.date }}</div>
       </label>
       <!-- Campo para ingresar el consejo en formato de texto largo -->
       <label>
         <p>Advice</p>
         <textarea v-model="advice" @input="validateAdvice"></textarea>
+        <!-- Mensaje de error para el consejo -->
         <div class="error" v-if="errors.advice">{{ errors.advice }}</div>
       </label>
     </div>
+
     <!-- Botón de envío del formulario -->
     <button @click.prevent="validateAndSubmit" :disabled="isSubmitDisabled">Send</button>
   </form>
 </template>
+
 <style>
-/* Estilo para los mensajes de error en color rojo y tamaño de fuente pequeño */
 .Contact .error {
   margin-top: 1rem;
   color: red;

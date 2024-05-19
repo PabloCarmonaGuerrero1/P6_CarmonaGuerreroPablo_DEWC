@@ -4,24 +4,45 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      // Información del usuario
       userInfo: {},
+      // Lista de amigos del usuario
       userFriends: [],
-      userAvatar: '@/assets/icons/perfil.png', // Aquí se verá una imagen de perfil a elección del usuario en futuras entregas
+      // Información de los comentarios del usuario
       commentInfo: [],
+      // Página actual de los comentarios
       currentPage: 1,
+      // Número de comentarios por página
       commentsPerPage: 4,
+      // Número total de comentarios
       num_comments : 0,
+      // Estado del modal
+      isModalOpen:false,
+      // Personajes de Rick and Morty
+      rickAndMortyCharacters: [],
+      // Página actual de personajes
+      page:1,
+      // Número total de páginas de personajes
+      totalPagesImage:0,
     };
   },
+  // Método ejecutado cuando el componente ha sido montado
   mounted() {
+    // Obtiene la información del usuario
     this.getUserInfo();
+    // Obtiene la lista de amigos del usuario
     this.getUserFriends();
+    // Obtiene los comentarios del usuario
     this.getComments();
+    // Obtiene los personajes de Rick and Morty
+    this.getRickAndMortyCharacters();
   },
   computed: {
+    // Calcula el número total de páginas de comentarios
     totalPages() {
       return Math.ceil(this.commentInfo.length / this.commentsPerPage);
     },
+    // Obtiene los comentarios paginados
     paginatedComments() {
       const startIndex = (this.currentPage - 1) * this.commentsPerPage;
       const endIndex = startIndex + this.commentsPerPage;
@@ -29,6 +50,7 @@ export default {
     }
   },
   methods: {
+    // Obtiene la información del usuario
     async getUserInfo() {
       try {
         const storedUsername = localStorage.getItem('username');
@@ -39,6 +61,7 @@ export default {
         console.error('Error fetching user information:', error);
       }
     },
+    // Obtiene la lista de amigos del usuario
     async getUserFriends() {
       try {
         const storedUsername = localStorage.getItem('username');
@@ -49,14 +72,17 @@ export default {
         console.error('Error fetching user friends:', error);
       }
     },
+    // Cierra la sesión del usuario
     logout() {
       localStorage.removeItem('username');
       this.$router.push('/login');
     },
+    // Guarda el amigo seleccionado y navega a su perfil
     saveFriendAndNavigate(usernameFriend) {
       localStorage.setItem('selectedFriend', usernameFriend);
       this.$router.push('/other-user');
     },
+    // Obtiene los comentarios del usuario
     async getComments() {
       try {
         const storedUsername = localStorage.getItem('username');
@@ -65,38 +91,73 @@ export default {
         this.commentInfo = response.data;
         this.num_comments = this.commentInfo.length;
         this.commentInfo.sort((a, b) => {
-        if (a.created_at > b.created_at) return -1;
-        if (a.created_at < b.created_at) return 1;
+          if (a.created_at > b.created_at) return -1;
+          if (a.created_at < b.created_at) return 1;
           return a.id - b.id;
         });
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
     },
+    // Formatea la fecha de los comentarios
     formatDate(dateString) {
       const date = new Date(dateString);
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
+    // Muestra u oculta el modal
+    toggleModal(){
+      this.isModalOpen=!this.isModalOpen;
+    },
+    // Obtiene los personajes de Rick and Morty
+    async getRickAndMortyCharacters() {
+      try {
+        const apiUrl = `https://rickandmortyapi.com/api/character?page=${this.page}`;
+        const response = await axios.get(apiUrl);
+        this.rickAndMortyCharacters = response.data.results;
+        this.totalPagesImage = response.data.info.pages;
+      } catch (error) {
+        console.error('Error fetching Rick and Morty characters:', error);
       }
     },
-    previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
+    // Selecciona un personaje de Rick and Morty
+    selectCharacter(character) {
+      this.submit(character.image);
+    },
+    // Actualiza el ícono del usuario con el personaje seleccionado
+    async submit(selectedCharacter) {
+      try {
+        const storedUsername = localStorage.getItem('username');
+        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
+        const response = await axios.put(apiUrl, { idicon: selectedCharacter });
+        this.getUserInfo();
+      } catch (error) {
+        console.error('Error submitting selected character:', error);
       }
     },
+    // Pasa a la siguiente página de personajes
+    nextPageImage() {
+      if (this.page < this.totalPagesImage) {
+        this.page++;
+        this.getRickAndMortyCharacters();
+      }
+    },
+    // Pasa a la página anterior de personajes
+    previousPageImage() {
+      if (this.page > 1) {
+        this.page--;
+        this.getRickAndMortyCharacters();
+      }
+    },
+    // Formatea los comentarios
     formatComment(comment) {
       const words = comment.split(' ');
       const formattedWords = words.map(word => {
-      if (word.startsWith('#')) {
-        return `<span class="hashtag">${word}</span>`;
-      } else {
-        return word;
-      }
-      }
-    );
+        if (word.startsWith('#')) {
+          return `<span class="hashtag">${word}</span>`;
+        } else {
+          return word;
+        }
+      });
       return formattedWords.join(' ');
     },
   },
@@ -104,47 +165,81 @@ export default {
 </script>
 
 <template>
-    <div class="user-profile">
-      <div class="profile-box">
-        <img src="@/assets/icons/perfil.png" alt="User Avatar">
-        <div class="user-info">
-          <p class="username_user">{{ userInfo.username }}</p>
-          <p class="comments_user">Comments</p>
-          <p class="comments_user">{{ this.num_comments }}</p>
-          <button @click="logout">Logout</button>
-        </div>
+  <div class="user-profile">
+    <!-- Sección de información del usuario -->
+    <div class="profile-box">
+      <!-- Avatar del usuario -->
+      <img :src="userInfo.idicon" alt="User Avatar" @click="toggleModal">
+      <!-- Información del usuario -->
+      <div class="user-info">
+        <p class="username_user">{{ userInfo.username }}</p>
+        <p class="comments_user">Comments</p>
+        <!-- Número de comentarios del usuario -->
+        <p class="comments_user">{{ this.num_comments }}</p>
+        <!-- Botón de cierre de sesión -->
+        <button @click="logout">Logout</button>
       </div>
-      <div class="user-comments">
-        <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
-          <div class="image-container">
-            <img src="@/assets/icons/perfil.png" alt="User icon" class="user-icon">
+      <!-- Modal para seleccionar el avatar -->
+      <Teleport to="body">
+        <div class="modalImage" v-if="isModalOpen">
+          <!-- Lista de imágenes de personajes de Rick and Morty -->
+          <div class="character-images">
+            <img v-for="character in rickAndMortyCharacters" :src="character.image" :alt="character.name" @click="selectCharacter(character)" class="character-image" :key="character.id">
           </div>
-          <div class="content-container">
-            <header class="post-header">
-              <p class="username">{{ comment.username }}</p>
-              <p class="date">{{ formatDate(comment.created_at) }}</p>
-            </header>
-            <p class="post-content" v-html="formatComment(comment.texto)"></p>
+          <!-- Botones de paginación de imágenes -->
+          <div class="buttons">
+            <button @click="previousPageImage" :disabled="page === 1">Previous</button>
+            <span>{{ page }}</span>
+            <button @click="nextPageImage" :disabled="currentPage === totalPagesImage">Next</button>
+            <button @click="toggleModal">Close</button>
           </div>
-        </article>
+        </div>
+      </Teleport>
+    </div>
+    <!-- Sección de comentarios del usuario -->
+    <div class="user-comments">
+      <!-- Lista de comentarios del usuario -->
+      <article v-for="comment in paginatedComments" :key="comment.id" class="comment-user">
+        <!-- Avatar del usuario -->
+        <div class="image-container">
+          <img :src="userInfo.idicon" alt="User icon" class="user-icon">
+        </div>
+        <!-- Contenido del comentario -->
+        <div class="content-container">
+          <header class="post-header">
+            <!-- Nombre de usuario que hizo el comentario -->
+            <p class="username">{{ comment.username }}</p>
+            <!-- Fecha del comentario -->
+            <p class="date">{{ formatDate(comment.created_at) }}</p>
+          </header>
+          <!-- Contenido del comentario -->
+          <p class="post-content" v-html="formatComment(comment.texto)"></p>
+        </div>
+      </article>
+      <!-- Botones de paginación de comentarios -->
+      <div class="button-container">
         <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-        <span>{{ currentPage }}</span>
         <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
-      <div class="user-friends">
-        <div class="friends-box">
-          <p class="friend-title">Friends</p>
-          <div class="friend-list">
-            <ul>
-              <li v-for="friend in userFriends" :key="friend">
-            <router-link @click="saveFriendAndNavigate(friend)" to="/other-user">{{ friend }}</router-link>
-          </li>
+    </div>
+    <!-- Sección de lista de amigos del usuario -->
+    <div class="user-friends">
+      <div class="friends-box">
+        <!-- Título de la lista de amigos -->
+        <p class="friend-title">Friends</p>
+        <!-- Lista de amigos -->
+        <div class="friend-list">
+          <ul>
+            <li v-for="friend in userFriends" :key="friend">
+              <!-- Enlace a la página del perfil del amigo -->
+              <router-link @click="saveFriendAndNavigate(friend)" to="/other-user">{{ friend }}</router-link>
+            </li>
           </ul>
-          </div>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <style>
   .user-profile {
@@ -257,6 +352,77 @@ export default {
 .friend-list a{
   text-decoration: none;
   color: inherit;
+}
+.modalImage{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #666565;
+  width: 50%;
+  height: 50%;
+  transform: translate(50%, 50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5rem;
+  flex-direction: column;
+}
+.modalImage img{
+  height: 6rem;
+  width: 6rem;
+  border-radius: 50%;
+}
+.modmodalImageal .buttons {
+  display: flex;
+  align-items: center; 
+  margin-top: 1rem;
+
+}
+.modalImage .buttons button,span {
+  margin-left: 1rem;
+
+}
+.modalImage .character-images{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.profile-box button {
+  height: 2rem;
+  width: 5rem;
+  margin-top: 1rem;
+  border-radius: 2.8125rem;
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 1.5rem;
+}
+.user-comments .button-container{
+  display: flex;
+  justify-content: center;
+}
+.user-comments button {
+  height: 2rem;
+  width: 5rem;
+  margin-top: 1rem;
+  border-radius: 2.8125rem;
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 1.5rem;
+  margin: auto;
+  display: block;
+}
+.modalImage button{
+  height: 2rem;
+  width: 5rem;
+  margin-top: 1rem;
+  border-radius: 2.8125rem;
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 1.5rem;
 }
   @media only screen and (max-width: 600px) {
     .user-profile {

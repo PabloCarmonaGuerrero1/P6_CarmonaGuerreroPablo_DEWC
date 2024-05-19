@@ -1,25 +1,40 @@
 <template>
-    <div class="NavBar">
-        <router-link to ="/Contact"><img src="@/assets/icons/charlando.png" alt="contact-page"></router-link> 
-        <router-link to ="/"><h1>Rick & Morty</h1></router-link>
-        <template v-if="!username">
-      <router-link to="/Login"><img src="@/assets/icons/perfil.png" alt="login-user"></router-link>
-    </template>
-    <template v-else>
-      <router-link to="/user"><img src="@/assets/icons/perfil.png" alt="user-profile"></router-link>
-    </template>
+  <div class="NavBar">
+    <router-link to="/Contact"><img src="@/assets/icons/charlando.png" alt="contact-page"></router-link> 
+    <router-link to="/"><h1>Rick & Morty</h1></router-link>
+    <router-link v-if="!username" to="/Login"><img src="@/assets/icons/perfil.png" alt="login-user" ></router-link>
+    <router-link v-else to="/user"><img :src="userAvatar" alt="user-profile" class="loged"></router-link>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      username: localStorage.getItem('username'),
+      userAvatar: null ,
+      username : localStorage.getItem('username')
     };
   },
+  mounted() {
+    this.getUserAvatar()
+  },
+  methods: {
+    async getUserAvatar() {
+      try {
+        const storedUsername = localStorage.getItem('username');
+        const apiUrl = `http://localhost/api/v1/users/${storedUsername}`; 
+        const response = await axios.get(apiUrl);
+        this.userAvatar = response.data.idicon;
+      } catch (error) {
+        console.error('Error fetching user avatar:', error);
+      }
+    }
+  }
 };
 </script>
+
 <style>
 .NavBar {
     height: 5rem;
@@ -44,7 +59,9 @@ export default {
 .NavBar a {
     text-decoration: none;
 }
-
+.loged {
+  border-radius: 50%;
+}
 @font-face {
     font-family: "Monofett";
     src: url("@/Modules/ModuleA/fonts/Monofett/Monofett-Regular.ttf") format("truetype");
