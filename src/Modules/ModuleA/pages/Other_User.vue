@@ -18,7 +18,7 @@ export default {
       // Página actual
       currentPage: 1,
       // Comentarios por página
-      commentsPerPage: 4,
+      commentsPerPage: 3,
       // Número total de comentarios
       num_comments: 0,
     };
@@ -187,10 +187,10 @@ export default {
         <!-- Número de comentarios del otro usuario -->
         <p class="comments-other">Comments: {{ num_comments }}</p>
         <!-- Botón para agregar o eliminar amigo -->
-        <button v-if="otherUserInfo.username !== username && username" @click="toggleFriendship">
-          {{ isFriend ? "Stop being friends" : "Add friend" }}
-        </button>
       </div>
+      <button v-if="otherUserInfo.username !== username && username" @click="toggleFriendship">
+          {{ isFriend ? "Stop being friends" : "Add friend" }}
+      </button>
     </div>
     <!-- Contenedor de los comentarios del otro usuario -->
     <div class="other-comments">
@@ -323,4 +323,51 @@ export default {
   margin: auto;
   display: block;
 }
+@media (max-width: 768px) {
+.other-user-profile{
+  flex-direction: column;
+  margin: 0;
+  height: 41rem;
+}
+.other-user-profile .other-profile-box{
+ height: auto;
+ width: 100%;
+ margin-top: 0rem;
+ padding: 1rem;
+ padding-right: 0;
+ padding-left: 0;
+ display: flex;
+ justify-content: space-around;
+}
+.other-user-profile img{
+ width: 5rem;
+ height: auto;
+ border-radius: 50%;
+ align-self: flex-start;
+ display: flex;
+}
+.other-user-profile .other-info{
+ font-size: 1rem;
+}
+.other-user-profile button{
+ font-size: 1.25rem;
+ width: 6rem;
+ height: 3rem;
+}
+.other-comments .Mensaje{
+  width: 100%;
+  font-size: 0.75rem;
+}
+.other-comments .username {
+  font-size: 1rem;
+}
+.other-comments button {
+  font-size: 1.5rem;
+}
+.other-comments .date{
+  margin-left: 2rem;
+  font-size: 1rem;
+}
+}
+
 </style>

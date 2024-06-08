@@ -234,7 +234,13 @@ export default {
         </div>
       </article>
       <!-- Botón para escribir un nuevo comentario -->
-      <button v-if="username" @click="toggleModal" class="write"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
+       <div class="buttons">
+        <button @click="previousPage" :disabled="currentPage === 1" class="pagination">Previous</button>
+        <button v-if="username" @click="toggleModal" class="write"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination">Next</button>
+       </div>
+
+      
       <!-- Modal para escribir un nuevo comentario -->
       <Teleport to="body">
         <div class="modal" v-if="isModalOpen">
@@ -243,10 +249,12 @@ export default {
               <textarea v-model="comment" placeholder="Use me to comment!"></textarea>
             </label>
           </form>
-          <!-- Botón para enviar el comentario -->
-          <button @click.prevent="submit">Send</button>
-          <!-- Botón para cerrar el modal -->
-          <button @click="toggleModal">Close</button>
+          <div class="buttons-modal">
+            <!-- Botón para enviar el comentario -->
+            <button @click.prevent="submit">Send</button>
+            <!-- Botón para cerrar el modal -->
+            <button @click="toggleModal">Close</button>
+          </div>
         </div>
       </Teleport>
     </div>
@@ -265,8 +273,7 @@ export default {
         </ul>
       </div>
       <!-- Botones de paginación -->
-      <button @click="previousPage" :disabled="currentPage === 1" class="pagination">Previous</button>
-      <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination">Next</button>
+
     </div>
   </div>
 </template>
@@ -384,7 +391,7 @@ export default {
   font-size: 1rem;
   flex-direction: column; 
 }
-.right-side .pagination {
+.Comentarios .pagination {
   height: 4rem;
   width: 6rem;
   margin-top: 1rem;
@@ -417,14 +424,53 @@ export default {
   font-family: 'Nanum Brush Script', cursive;
   font-size: 2rem;
 }
+.buttons{
+  display: flex;
+  align-items: center;
+}
+.modal button{
+  height: 4rem;
+  width: 8rem;
+  margin-top: 1rem;
+  border-radius: 2.8125rem;
+  background-color: #2CD824;
+  color: black;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 2.5rem;
+  
+}
+.buttons-modal{
+  display: flex;
+  justify-content: center;
+}
+.modal>div{
+  background-color: transparent;
+}
+.modal textarea{
+  height: 8rem;
+  width: 20rem;
+  margin-top: 0;
+  padding: 1rem;
+  border-radius: 2.8125rem;
+  font-family: 'Mogra', sans-serif;
+  font-size: 1.5rem;
+}
 @media (max-width: 768px) {
+  .homepage{
+    display: flex;
+    flex-direction: column;
+    height: 78rem;
+  }
   .Comentarios {
-    margin-left: 2rem;
+    margin-left: 0rem;
   }
 
   .Mensaje {
-    max-width: 19rem;
+    width: 100%;
     margin-left: 0;
+    padding: 1rem;
+    padding-right: 0;
+    padding-left: 0;
   }
   .user-icon{
     max-width: 3rem;
@@ -441,6 +487,34 @@ export default {
   }
   .post-content{
     font-size: 1rem;
+  }
+  .right-side{
+    height: auto;
+    width: 100%;
+    padding: 0;
+    padding-right: 0;
+    padding-left: 0;
+    margin: 0;
+  }
+  .modal{
+    width: 100%;
+    height: 60%;
+    transform: none;
+    margin-top: 5rem;
+  }
+  .modal textarea{
+    height: 5rem;
+    width: 16rem;
+    margin-top: 0;
+    padding: 1rem;
+    border-radius: 2.8125rem;
+    font-family: 'Mogra', sans-serif;
+    font-size: 1.5rem;
+  }
+  .modal button{
+    height: 5rem;
+    width: 8rem;
+    font-size: 3rem;
   }
 }
 </style>

@@ -13,7 +13,7 @@ export default {
       // Página actual de los comentarios
       currentPage: 1,
       // Número de comentarios por página
-      commentsPerPage: 4,
+      commentsPerPage: 3,
       // Número total de comentarios
       num_comments : 0,
       // Estado del modal
@@ -148,6 +148,18 @@ export default {
         this.getRickAndMortyCharacters();
       }
     },
+    // Página siguiente
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    // Página anterior
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
     // Formatea los comentarios
     formatComment(comment) {
       const words = comment.split(' ');
@@ -176,9 +188,9 @@ export default {
         <p class="comments_user">Comments</p>
         <!-- Número de comentarios del usuario -->
         <p class="comments_user">{{ this.num_comments }}</p>
+      </div>
         <!-- Botón de cierre de sesión -->
         <button @click="logout">Logout</button>
-      </div>
       <!-- Modal para seleccionar el avatar -->
       <Teleport to="body">
         <div class="modalImage" v-if="isModalOpen">
@@ -190,7 +202,7 @@ export default {
           <div class="buttons">
             <button @click="previousPageImage" :disabled="page === 1">Previous</button>
             <span>{{ page }}</span>
-            <button @click="nextPageImage" :disabled="currentPage === totalPagesImage">Next</button>
+            <button @click="nextPageImage" :disabled="page === totalPagesImage">Next</button>
             <button @click="toggleModal">Close</button>
           </div>
         </div>
@@ -427,111 +439,105 @@ export default {
   @media only screen and (max-width: 600px) {
     .user-profile {
     display: flex;
+    flex-direction: column;
+    height: 56rem;
+  }
+  .profile-box {
+    height: auto;
+    width: 100%;
+    padding: 1rem;
+    padding-right: 0;
+    padding-left: 0;
+    display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 77.4vh;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .profile-box {
-    width: 5rem;
-    height: 5rem; 
-    text-align: center;
-    padding: 2rem;
-    border-radius: 1.875rem;
   }  
+  .user-comments{
+    width: 100%;
+    font-size: 0.75rem;
+  }
+  .user-friends{
+    width: 100%;
+  }
+  .user-friends .friends-box{
+    height: auto;
+    width: 100%;
+    padding: 1rem;
+    padding-right: 0;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .user-friends .friend-title{
+    font-size: 1.25rem;
+    margin-bottom: 0rem;
+  }
+  .user-friends .friend-list{
+    font-size: 1rem;
+    margin-top: 0;
+    margin-right: 8rem;
+  }
   .profile-box img {
-    width: 5rem; 
-    height: auto; 
+    width: 5rem;
+    height: auto;
     border-radius: 50%;
+    align-items: center;
+    display: flex;
   }
   .user-info {
-    margin-top: 1rem;
-    text-align: center;
+    font-size: 1rem;
   }
 
-  .user-info .username {
+  .user-info .username_user {
     font-size: 1.5rem;
+    margin-top: 0;
 
   }
-
-  .user-info .comments {
+  .user-info .comments_user {
     font-size: 1rem;
   }
-
-  .user-comments .comment-user{
-    max-width: 5rem;
-    margin-bottom: 3rem;
-    padding: 1rem;
-    border-radius: 1.875rem;
-    display: flex;
-    background-color: #2E3244;
-    color: white;
-    font-family: 'Mogra', sans-serif;
-    font-size: 1rem;
-}
-.user-comments .image-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.user-comments .user-icon {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-}
-.user-comments .content-container {
-    flex-grow: 1;
-}
-.user-comments .post-header {
-    margin: 0;
-    display: flex;
-    align-items: center;
-}
-.user-comments .username {
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-    margin-left: 6rem;
-    font-size: 1.25rem;
+  .user-comments .username {
+  font-size: 1.25rem;
+  margin-left: 1rem;
 }
 .user-comments .date{
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-    margin-left: 3rem;
-    font-size: 1.25rem;
-}
-.user-comments .post-content span {
-    color: #0BFF00;
-}
+  margin-left: 2rem;
+  font-size: 1.25rem;
+  }
 .user-comments .post-content{
-    margin-left: 1rem;
-    margin-top: 0;
-}
-.user-friends{
-  max-height: 38.6875rem;
-}
-.friends-box{
-  width: 10rem;
-  height: 10rem;
-  padding: 2rem;
-  border-radius: 1.875rem;
-  background-color: #2E3244;
-  color: white;
-  font-family: 'Mogra', sans-serif;
-}
-.friends-box .friend-title{
-  text-align: center;
-  font-size: 1.5rem;
-  text-decoration: underline;
-}
-.friends-box .friend-list{
-  margin-left: 1rem;
+  margin-top: 0.3rem;
   font-size: 1.25rem;
 }
-.friend-list a{
-  text-decoration: none;
-  color: inherit;
+.modalImage{
+  width: 100%;
+  height: 70%;
+  transform: none;
+  margin-top: 4rem;
 }
-  }
+.modalImage img{
+  width: 5rem;
+  height: 5rem;
+}
+.modalImage button{
+  height: 3rem;
+  width: 5rem;
+  font-size: 1.6rem;
+}
+.modalImage span{
+  font-size: 1.6rem;
+}
+.profile-box button{
+  width: 6rem;
+  height: 3rem;
+  font-size: 1.75rem;
+}
+.user-comments button{
+  width: 6rem;
+  height: 3rem;
+  font-size: 1.75rem;
+  margin-top: -1rem;
+}
+}
+
 </style>
