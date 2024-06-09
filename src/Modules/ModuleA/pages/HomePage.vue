@@ -15,6 +15,7 @@ export default {
       userInfo : [], // Información del usuario
       filters:[], // Filtros para hashtags
       showTopHashtags: true, // Mostrar los hashtags principales
+      isLightMode: localStorage.getItem('light-mode') === 'true'
     };
   },
   // Función que se ejecuta cuando el componente se monta
@@ -214,7 +215,7 @@ export default {
     <!-- Contenedor de los comentarios -->
     <div class="Comentarios">
       <!-- Itera sobre los comentarios paginados -->
-      <article v-for="comment in paginatedComments" :key="comment.id" class="Mensaje">
+      <article v-for="comment in paginatedComments" :key="comment.id" class="Mensaje" :class="{ 'light-mode-comment': isLightMode }">
         <!-- Contenedor de la imagen del usuario -->
         <div class="image-container">
           <!-- Muestra la imagen del usuario -->
@@ -234,7 +235,7 @@ export default {
         </div>
       </article>
       <!-- Botón para escribir un nuevo comentario -->
-       <div class="buttons">
+       <div class="buttons" :class="{ 'light-mode-buttons': isLightMode }">
         <button @click="previousPage" :disabled="currentPage === 1" class="pagination">Previous</button>
         <button v-if="username" @click="toggleModal" class="write"><img src="@/assets/icons/pluma.png" alt="pluma"></button>
         <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination">Next</button>
@@ -243,7 +244,7 @@ export default {
       
       <!-- Modal para escribir un nuevo comentario -->
       <Teleport to="body">
-        <div class="modal" v-if="isModalOpen">
+        <div class="modal" v-if="isModalOpen" :class="{ 'light-mode-modal': isLightMode }">
           <form>
             <label>
               <textarea v-model="comment" placeholder="Use me to comment!"></textarea>
@@ -259,9 +260,9 @@ export default {
       </Teleport>
     </div>
     <!-- Panel lateral derecho -->
-    <div class="right-side">
+    <div class="right-side" >
       <!-- Filtros de comentarios -->
-      <div class="comments-filter">
+      <div class="comments-filter" :class="{ 'light-mode-rightside': isLightMode }">
         <!-- Botón para alternar entre los hashtags principales y los hashtags recientes -->
         <button @click="toggleHashtags" class="filter-title">{{ showTopHashtags ? 'Top Hastags' : 'Last Hastags' }}</button>
         <ul>
@@ -279,242 +280,325 @@ export default {
 </template>
 
 <style>
+/* Estilos para el contenedor principal de la página de inicio */
 .homepage{
-  display: flex; 
-  justify-content: space-between;
+  display: flex; /* Utiliza el modelo de caja flexible */
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
 }
+
+/* Estilos para el contenedor de comentarios */
 .Comentarios {
-  min-height: 50rem;
-  margin-left: 7rem;
-  margin-top: 3rem;
+  min-height: 50rem; /* Altura mínima del contenedor de comentarios de 50 rem */
+  margin-left: 7rem; /* Margen izquierdo de 7 rem */
+  margin-top: 3rem; /* Margen superior de 3 rem */
 }
 
+/* Estilos para cada mensaje dentro del contenedor de comentarios */
 .Mensaje {
-  width: 60rem;
-  margin-bottom: 3rem;
-  padding: 1rem;
-  border-radius: 1.875rem;
-  display: flex;
-  background-color: #2E3244;
-  color: white;
-  font-family: 'Mogra', sans-serif;
-  font-size: 1rem;
+  max-width: 60rem; /* Ancho máximo del mensaje de 60 rem */
+  min-width: 60rem; /* Ancho mínimo del mensaje de 60 rem */
+  margin-bottom: 3rem; /* Margen inferior de 3 rem */
+  padding: 1rem; /* Relleno de 1 rem */
+  border-radius: 1.875rem; /* Radio del borde del mensaje */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  background-color: #2E3244; /* Color de fondo del mensaje */
+  color: white; /* Color del texto en blanco */
+  font-family: 'Mogra', sans-serif; /* Fuente del texto */
+  font-size: 1.2rem; /* Tamaño de fuente de 1.2 rem */
 }
 
+/* Estilos para el contenedor de imagen dentro del mensaje */
 .image-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; /* Utiliza el modelo de caja flexible */
+  align-items: center; /* Centra verticalmente los elementos */
+  justify-content: center; /* Centra horizontalmente los elementos */
 }
 
+/* Estilos para el icono de usuario dentro del mensaje */
 .user-icon {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
+  width: 4rem; /* Ancho del icono de usuario de 4 rem */
+  height: 4rem; /* Altura del icono de usuario de 4 rem */
+  border-radius: 50%; /* Radio del borde del icono de usuario */
 }
 
+/* Estilos para el contenedor de contenido dentro del mensaje */
 .content-container {
-  flex-grow: 1;
+  flex-grow: 1; /* Permite que el contenedor ocupe todo el espacio disponible */
 }
 
+/* Estilos para el encabezado del mensaje */
 .post-header {
-  margin: 0;
-  display: flex;
-  align-items: center;
+  margin: 0; /* Elimina el margen */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  align-items: center; /* Centra verticalmente los elementos */
 }
 
+/* Estilos para el nombre de usuario en el mensaje */
 .username {
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-  margin-left: 6rem;
-  font-size: 1.25rem;
-  text-decoration: none;
-  color: inherit;
+  margin-top: 0rem; /* Margen superior de 0 rem */
+  margin-bottom: 0rem; /* Margen inferior de 0 rem */
+  margin-left: 6rem; /* Margen izquierdo de 6 rem */
+  font-size: 1.3rem; /* Tamaño de fuente de 1.3 rem */
+  text-decoration: none; /* Elimina la decoración de texto */
+  color: inherit; /* Utiliza el color de texto heredado */
 }
 
+/* Estilos para la fecha en el mensaje */
 .date {
-  margin-top: 0rem;
-  margin-bottom: 0rem;
-  margin-left: 3rem;
-  font-size: 1.25rem;
+  margin-top: 0rem; /* Margen superior de 0 rem */
+  margin-bottom: 0rem; /* Margen inferior de 0 rem */
+  margin-left: 3rem; /* Margen izquierdo de 3 rem */
+  font-size: 1.3rem; /* Tamaño de fuente de 1.3 rem */
 }
 
+/* Estilos para el contenido del mensaje */
 .post-content span {
-  color: #0BFF00;
+  color: #0BFF00; /* Color del texto en verde */
 }
 
+/* Estilos para el contenido del mensaje */
 .post-content {
-  margin-left: 1rem;
-  margin-top: 0;
+  margin-left: 1rem; /* Margen izquierdo de 1 rem */
+  margin-top: 0.3rem; /* Margen superior de 0.3 rem */
 }
+
+/* Estilos para el modal */
 .modal{
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #666565;
-  width: 50%;
-  height: 50%;
-  transform: translate(50%, 50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5rem;
-  flex-direction: column;
+  position: fixed; /* Posición fija */
+  top: 0; /* Desde la parte superior de la ventana gráfica */
+  left: 0; /* Desde la parte izquierda de la ventana gráfica */
+  background-color: #666565; /* Color de fondo */
+  width: 50%; /* Ancho del modal */
+  height: 50%; /* Altura del modal */
+  transform: translate(50%, 50%); /* Centra el modal */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  justify-content: center; /* Centra horizontalmente los elementos */
+  align-items: center; /* Centra verticalmente los elementos */
+  border-radius: 5rem; /* Radio del borde */
+  flex-direction: column; /* Los elementos dentro del modal se colocan en columna */
 }
+
+/* Estilos para los elementos dentro del modal */
 .modal>div{
-  background-color: aliceblue;
-  padding: 50px;
+  background-color: aliceblue; /* Color de fondo del div */
+  padding: 50px; /* Relleno de 50 píxeles */
 }
-.hashtag {
-  color: #00ff00; 
-}
+
+/* Estilos para el lado derecho de la página */
 .right-side {
-  width: 25%; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;  
-  margin-left: 1rem;
+  width: 25%; /* Ancho del lado derecho de la página */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  align-items: center; /* Centra verticalmente los elementos */
+  justify-content: center; /* Centra horizontalmente los elementos */
+  flex-direction: column; /* Los elementos dentro del lado derecho se colocan en columna */
+  margin-left: 1rem; /* Margen izquierdo de 1 rem */
 }
+
+/* Estilos para el filtro de comentarios */
 .right-side .comments-filter{
-  display: flex;
-  align-items: center;
-  width: 14rem;
-  margin-bottom: 3rem;
-  margin-left: 0;
-  padding: 0rem;
-  border-radius: 1.875rem;
-  display: flex;
-  background-color: #2E3244;
-  color: #00ff00;
-  font-family: 'Mogra', sans-serif;
-  font-size: 1rem;
-  flex-direction: column; 
+  display: flex; /* Utiliza el modelo de caja flexible */
+  align-items: center; /* Centra verticalmente los elementos */
+  width: 14rem; /* Ancho del filtro de comentarios */
+  margin-bottom: 3rem; /* Margen inferior de 3 rem */
+  margin-left: 0; /* Margen izquierdo de 0 */
+  padding: 0rem; /* Relleno de 0 */
+  border-radius: 1.875rem; /* Radio del borde */
+  background-color: #2E3244; /* Color de fondo */
+  color: #00ff00; /* Color del texto en verde */
+  font-family: 'Mogra', sans-serif; /* Fuente del texto */
+  font-size: 1.2rem; /* Tamaño de fuente de 1.2 rem */
+  flex-direction: column; /* Los elementos dentro del filtro se colocan en columna */
 }
+
+/* Estilos para la paginación dentro de los comentarios */
 .Comentarios .pagination {
-  height: 4rem;
-  width: 6rem;
-  margin-top: 1rem;
-  border-radius: 2.8125rem;
-  background-color: #2CD824;
-  color: black;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 2rem;
+  height: 4rem; /* Altura de la paginación de 4 rem */
+  width: 6rem; /* Ancho de la paginación de 6 rem */
+  margin-top: 1rem; /* Margen superior de 1 rem */
+  border-radius: 2.8125rem; /* Radio del borde */
+  background-color: #2CD824; /* Color de fondo */
+  color: black; /* Color del texto en negro */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 2rem; /* Tamaño de fuente de 2 rem */
 }
+
+/* Estilos para los elementos de la lista dentro del filtro de comentarios */
 .comments-filter li{
-  margin-left: -5rem;
+  margin-left: -5rem; /* Margen izquierdo negativo de 5 rem */
 }
+
+/* Estilos para el botón de escribir */
 .write{
-  height: 4rem;
-  width: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background-color: #2CD824;
-  margin: 2rem auto;
+  height: 4rem; /* Altura del botón de escribir de 4 rem */
+  width: 4rem; /* Ancho del botón de escribir de 4 rem */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  justify-content: center; /* Centra horizontalmente los elementos */
+  align-items: center; /* Centra verticalmente los elementos */
+  border-radius: 50%; /* Radio del borde */
+  background-color: #2CD824; /* Color de fondo */
 }
+
+/* Estilos para el título del filtro */
 .filter-title{
-  width: 10rem;
-  height: 3rem;
-  margin-top: 1rem;
-  border-radius: 2.8125rem;
-  background-color: #2CD824;
-  color: black;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 2rem;
+  width: 10rem; /* Ancho del título del filtro de 10 rem */
+  height: 3rem; /* Altura del título del filtro de 3 rem */
+  margin-top: 1rem; /* Margen superior de 1 rem */
+  border-radius: 2.8125rem; /* Radio del borde */
+  background-color: #2CD824; /* Color de fondo */
+  color: black; /* Color del texto en negro */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 2rem; /* Tamaño de fuente de 2 rem */
 }
+
+/* Estilos para los botones */
 .buttons{
-  display: flex;
-  align-items: center;
+  display: flex; /* Utiliza el modelo de caja flexible */
+  align-items: center; /* Centra verticalmente los elementos */
+  justify-content: space-around; /* Distribuye el espacio entre los elementos */
+  padding: 1rem; /* Relleno de 1 rem */
 }
+
+/* Estilos para los botones dentro del modal */
 .modal button{
-  height: 4rem;
-  width: 8rem;
-  margin-top: 1rem;
-  border-radius: 2.8125rem;
-  background-color: #2CD824;
-  color: black;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 2.5rem;
-  
+  height: 4rem; /* Altura del botón de 4 rem */
+  width: 8rem; /* Ancho del botón de 8 rem */
+  margin-top: 1rem; /* Margen superior de 1 rem */
+  border-radius: 2.8125rem; /* Radio del borde */
+  background-color: #2CD824; /* Color de fondo */
+  color: black; /* Color del texto en negro */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 2.5rem; /* Tamaño de fuente de 2.5 rem */
 }
+
+/* Estilos para los botones dentro del modal */
 .buttons-modal{
-  display: flex;
-  justify-content: center;
+  display: flex; /* Utiliza el modelo de caja flexible */
+  justify-content: center; /* Centra horizontalmente los elementos */
 }
+
+/* Estilos para los elementos dentro del modal */
 .modal>div{
-  background-color: transparent;
+  background-color: transparent; /* Color de fondo transparente */
 }
+
+/* Estilos para el área de texto dentro del modal */
 .modal textarea{
-  height: 8rem;
-  width: 20rem;
-  margin-top: 0;
-  padding: 1rem;
-  border-radius: 2.8125rem;
-  font-family: 'Mogra', sans-serif;
-  font-size: 1.5rem;
+  height: 8rem; /* Altura del área de texto de 8 rem */
+  width: 20rem; /* Ancho del área de texto de 20 rem */
+  margin-top: 0; /* Margen superior de 0 */
+  padding: 1rem; /* Relleno de 1 rem */
+  border-radius: 2.8125rem; /* Radio del borde */
+  font-family: 'Mogra', sans-serif; /* Fuente del texto */
+  font-size: 1.5rem; /* Tamaño de fuente de 1.5 rem */
 }
+
+/* Estilos específicos para el modo claro en los comentarios */
+.light-mode-comment{
+  background-color: white; /* Color de fondo blanco */
+  color: black; /* Color del texto en negro */
+  border: 2px solid black; /* Borde de 2 píxeles sólido negro */
+}
+
+/* Estilos específicos para el modo claro en los comentarios */
+.light-mode-comment span{
+  -webkit-text-stroke: 1px black; /* Contorno de texto de 1 píxel */
+}
+
+/* Estilos específicos para el modo claro en el lado derecho */
+.right-side .light-mode-rightside{
+  background-color: white; /* Color de fondo blanco */
+  -webkit-text-stroke: 1px black; /* Contorno de texto de 1 píxel */
+  border: 2px solid black; /* Borde de 2 píxeles sólido negro */
+}
+
+/* Estilos específicos para el modo claro en el lado derecho */
+.right-side .light-mode-rightside button{
+  -webkit-text-stroke: 0px black; /* Sin contorno de texto */
+  background-color: #00ff00; /* Color de fondo en verde */
+}
+
+/* Estilos específicos para el modo claro en los botones de los comentarios */
+.Comentarios .light-mode-buttons button{
+  background-color: #00ff00; /* Color de fondo en verde */
+}
+
+/* Estilos específicos para el modo claro en el modal */
+.light-mode-modal{
+  background-color: white; /* Color de fondo blanco */
+  border: 2px solid black; /* Borde de 2 píxeles sólido negro */
+}
+
+/* Estilos específicos para el modo claro en el área de texto del modal */
+.light-mode-modal textarea{
+  border: 2px solid black; /* Borde de 2 píxeles sólido negro */
+}
+
+/* Estilos específicos para el modo claro en los botones del modal */
+.light-mode-modal button{
+  background-color: #00ff00; /* Color de fondo en verde */
+}
+
+/* Media query para dispositivos con un ancho máximo de 768px */
 @media (max-width: 768px) {
   .homepage{
-    display: flex;
-    flex-direction: column;
-    height: 78rem;
+    display: flex; /* Utiliza el modelo de caja flexible */
+    flex-direction: column; /* Los elementos se colocan en columna */
+    height: 78rem; /* Altura de la página de inicio de 78 rem */
   }
   .Comentarios {
-    margin-left: 0rem;
+    margin-left: 0rem; /* Margen izquierdo de 0 rem */
   }
 
   .Mensaje {
-    width: 100%;
-    margin-left: 0;
-    padding: 1rem;
-    padding-right: 0;
-    padding-left: 0;
+    width: 100%; /* Ancho del mensaje al 100% */
+    margin-left: 0; /* Margen izquierdo de 0 */
+    padding: 1rem; /* Relleno de 1 rem */
+    padding-right: 0; /* Relleno derecho de 0 */
+    padding-left: 0; /* Relleno izquierdo de 0 */
   }
   .user-icon{
-    max-width: 3rem;
-    max-height: 3rem;
+    max-width: 3rem; /* Ancho máximo del icono de usuario de 3 rem */
+    max-height: 3rem; /* Altura máxima del icono de usuario de 3 rem */
 }
   .username {
-    margin-left: 2rem;
-    font-size: 1rem;
+    margin-left: 2rem; /* Margen izquierdo de 2 rem */
+    font-size: 1rem; /* Tamaño de fuente de 1 rem */
   }
 
   .date {
-    margin-left: 2rem;
-    font-size: 1rem;
+    margin-left: 2rem; /* Margen izquierdo de 2 rem */
+    font-size: 1rem; /* Tamaño de fuente de 1 rem */
   }
   .post-content{
-    font-size: 1rem;
+    font-size: 1rem; /* Tamaño de fuente de 1 rem */
   }
   .right-side{
-    height: auto;
-    width: 100%;
-    padding: 0;
-    padding-right: 0;
-    padding-left: 0;
-    margin: 0;
+    height: auto; /* Altura automática */
+    width: 100%; /* Ancho al 100% */
+    padding: 0; /* Sin relleno */
+    padding-right: 0; /* Sin relleno derecho */
+    padding-left: 0; /* Sin relleno izquierdo */
+    margin: 0; /* Sin margen */
   }
   .modal{
-    width: 100%;
-    height: 60%;
-    transform: none;
-    margin-top: 5rem;
+    width: 100%; /* Ancho del modal al 100% */
+    height: 60%; /* Altura del modal al 60% */
+    transform: none; /* Sin transformaciones */
+    margin-top: 5rem; /* Margen superior de 5 rem */
   }
   .modal textarea{
-    height: 5rem;
-    width: 16rem;
-    margin-top: 0;
-    padding: 1rem;
-    border-radius: 2.8125rem;
-    font-family: 'Mogra', sans-serif;
-    font-size: 1.5rem;
+    height: 5rem; /* Altura del área de texto del modal de 5 rem */
+    width: 16rem; /* Ancho del área de texto del modal de 16 rem */
+    margin-top: 0; /* Margen superior de 0 */
+    padding: 1rem; /* Relleno de 1 rem */
+    border-radius: 2.8125rem; /* Radio del borde */
+    font-family: 'Mogra', sans-serif; /* Fuente del texto */
+    font-size: 1.5rem; /* Tamaño de fuente de 1.5 rem */
   }
   .modal button{
-    height: 5rem;
-    width: 8rem;
-    font-size: 3rem;
+    height: 5rem; /* Altura del botón de 5 rem */
+    width: 8rem; /* Ancho del botón de 8 rem */
+    font-size: 3rem; /* Tamaño de fuente de 3 rem */
   }
 }
 </style>

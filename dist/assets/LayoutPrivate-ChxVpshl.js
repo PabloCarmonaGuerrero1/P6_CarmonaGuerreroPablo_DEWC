@@ -1,0 +1,1 @@
+import{_ as o,b as t,o as r,r as a}from"./index-Co1rkqzz.js";const n={name:"PrivateLayout"};function s(c,_,p,i,u,f){const e=a("router-view");return r(),t(e)}const v=o(n,[["render",s]]);export{v as default};

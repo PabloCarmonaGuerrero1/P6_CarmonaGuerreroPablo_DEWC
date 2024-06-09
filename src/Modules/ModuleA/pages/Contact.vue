@@ -23,6 +23,7 @@ export default {
       },
       // Indicador de inhabilitar el botón de envío
       isSubmitDisabled: true,
+      isLightMode: localStorage.getItem('light-mode') === 'true' 
     };
   },
   methods: {
@@ -170,7 +171,7 @@ export default {
 
 <template>
   <!-- Formulario con opciones para revisión o consejo -->
-  <form class="Contact">
+  <form class="Contact" :class="{ 'light-mode-contact': isLightMode }">
     <!-- Selector para elegir entre revisión y consejo -->
     <label>
       <select v-model="selected" @change="handleSelectChange">
@@ -237,94 +238,131 @@ export default {
 </template>
 
 <style>
+/* Estilos para mensajes de error dentro de la clase Contact */
 .Contact .error {
-  margin-top: 1rem;
-  color: red;
-  font-size: 1rem;
+  margin-top: 1rem; /* Margen superior de 1 rem */
+  color: red; /* Color del texto en rojo */
+  font-size: 1rem; /* Tamaño de fuente de 1 rem */
 }
-.Contact {
-  margin-top: 5rem;
-  margin-bottom: 5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
+/* Estilos para el contenedor de contacto */
+.Contact {
+  margin-top: 5rem; /* Margen superior de 5 rem */
+  margin-bottom: 5rem; /* Margen inferior de 5 rem */
+  display: flex; /* Utiliza el modelo de caja flexible */
+  flex-direction: column; /* Los elementos dentro del contenedor se colocan en columna */
+  align-items: center; /* Centra los elementos horizontalmente */
+  justify-content: center; /* Centra los elementos verticalmente */
 }
-.Contact label{
-  display: block;
-  text-align: center;
+
+/* Estilos para las etiquetas de texto dentro del formulario de contacto */
+.Contact label {
+  display: block; /* Muestra las etiquetas como bloques */
+  text-align: center; /* Alinea el texto al centro */
 }
-.Contact input{
-  height: 4rem;
-  width: 20rem;
-  margin-top: 0;
-  border-radius: 2.8125rem;
-  text-align: center;
-  font-family: 'Mogra', sans-serif;
-  font-size: 1.5rem;
+
+/* Estilos para los campos de entrada de texto dentro del formulario de contacto */
+.Contact input {
+  height: 4rem; /* Altura del campo de entrada de texto de 4 rem */
+  width: 20rem; /* Ancho del campo de entrada de texto de 20 rem */
+  margin-top: 0; /* Margen superior de 0 */
+  border-radius: 2.8125rem; /* Radio del borde del campo de entrada */
+  text-align: center; /* Alinea el texto al centro */
+  font-family: 'Mogra', sans-serif; /* Fuente del texto */
+  font-size: 1.5rem; /* Tamaño de fuente de 1.5 rem */
 }
-.Contact textarea{
-  height: 4rem;
-  width: 20rem;
-  margin-top: 0;
-  padding: 1rem;
-  border-radius: 2.8125rem;
-  font-family: 'Mogra', sans-serif;
-  font-size: 1.5rem;
-  
+
+/* Estilos para el área de texto dentro del formulario de contacto */
+.Contact textarea {
+  height: 4rem; /* Altura del área de texto de 4 rem */
+  width: 20rem; /* Ancho del área de texto de 20 rem */
+  margin-top: 0; /* Margen superior de 0 */
+  padding: 1rem; /* Relleno de 1 rem */
+  border-radius: 2.8125rem; /* Radio del borde del área de texto */
+  font-family: 'Mogra', sans-serif; /* Fuente del texto */
+  font-size: 1.5rem; /* Tamaño de fuente de 1.5 rem */
 }
-.Contact p{
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  color: #0BFF00;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 4rem; 
+
+/* Estilos para los párrafos dentro del formulario de contacto */
+.Contact p {
+  margin-top: 0.5rem; /* Margen superior de 0.5 rem */
+  margin-bottom: 0.5rem; /* Margen inferior de 0.5 rem */
+  color: #0BFF00; /* Color del texto en verde */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 4rem; /* Tamaño de fuente de 4 rem */
 }
-.Contact select{
-  height: 4rem;
-  width: 20rem;
-  border-radius: 2.8125rem;
-  text-align: center;
-  color: black;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 3rem;
+
+/* Estilos para los selectores dentro del formulario de contacto */
+.Contact select {
+  height: 4rem; /* Altura del selector de 4 rem */
+  width: 20rem; /* Ancho del selector de 20 rem */
+  border-radius: 2.8125rem; /* Radio del borde del selector */
+  text-align: center; /* Alinea el texto al centro */
+  color: black; /* Color del texto en negro */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 3rem; /* Tamaño de fuente de 3 rem */
 }
-.Contact  button{
-  height: 3.5rem;
-  width: 12rem;
-  margin-top: 2rem;
-  border-radius: 2.8125rem;
-  background-color: #2CD824;
-  color: black;
-  font-family: 'Nanum Brush Script', cursive;
-  font-size: 3rem;
+
+/* Estilos para el botón de enviar dentro del formulario de contacto */
+.Contact button {
+  height: 3.5rem; /* Altura del botón de enviar de 3.5 rem */
+  width: 12rem; /* Ancho del botón de enviar de 12 rem */
+  margin-top: 2rem; /* Margen superior de 2 rem */
+  border-radius: 2.8125rem; /* Radio del borde del botón */
+  background-color: #2CD824; /* Color de fondo del botón */
+  color: black; /* Color del texto en negro */
+  font-family: 'Nanum Brush Script', cursive; /* Fuente del texto */
+  font-size: 3rem; /* Tamaño de fuente de 3 rem */
 }
-@media (max-width:768px){
-  .Contact{
-    min-height: 40rem;
+
+/* Estilos específicos para el modo de luz en el formulario de contacto */
+.light-mode-contact input {
+  border: 2px solid black; /* Borde del campo de entrada de texto de 2 píxeles sólido negro */
+}
+
+.light-mode-contact textarea {
+  border: 2px solid black; /* Borde del área de texto de 2 píxeles sólido negro */
+}
+
+.light-mode-contact p {
+  -webkit-text-stroke: 1px black; /* Añade un contorno de 1 píxel de grosor en negro al texto */
+}
+
+.light-mode-contact button {
+  background-color: #0BFF00; /* Color de fondo del botón en verde */
+  border: 2px solid black; /* Borde del botón de enviar de 2 píxeles sólido negro */
+}
+
+/* Estilos específicos para pantallas con un ancho máximo de 768px */
+@media (max-width:768px) {
+  .Contact {
+    min-height: 40rem; /* Altura mínima del contenedor de contacto de 40 rem */
   }
-  .Contact input{
-  width: 15rem;
-  border-radius: 2.8125rem;
-  font-size: 1rem;
+
+  .Contact input {
+    width: 15rem; /* Ancho del campo de entrada de texto de 15 rem */
+    border-radius: 2.8125rem; /* Radio del borde del campo de entrada */
+    font-size: 1rem; /* Tamaño de fuente de 1 rem */
+  }
+
+  .Contact textarea {
+    width: 15rem; /* Ancho del área de texto de 15 rem */
+    height: 3rem; /* Altura del área de texto de 3 rem */
+    font-size: 1rem; /* Tamaño de fuente de 1 rem */
+  }
+
+  .Contact select {
+    width: 18rem; /* Ancho del selector de 18 rem */
+    height: 3rem; /* Altura del selector de 3 rem */
+    font-size: 2rem; /* Tamaño de fuente de 2 rem */
+  }
+
+  .Contact p {
+    font-size: 3rem; /* Tamaño de fuente de 3 rem */
+  }
+  .Contact button {
+    width: 6rem; /* Ancho del botón de enviar de 6 rem */
+    font-size: 2rem; /* Tamaño de fuente de 2 rem */
+  }
 }
-.Contact textarea{
-  width: 15rem;
-  height: 3rem;
-  font-size: 1rem;
-}
-.Contact select{
-  width: 18rem;
-  height: 3rem;
-  font-size: 2rem;
-}
-.Contact p{
-  font-size: 3rem;
-}
-}
-.Contact button{
-  width: 6rem;
-  font-size: 2rem;
-}
-</style>
+</style> 
